@@ -1,0 +1,10 @@
+Project Write Up- PecPocket
+Team Members- Isha Garg, Kalash Jain, Dhruv Kauts, Guneet Kaur
+
+PecPocket is a one stop app for college students. One can simply sign up using their college email ids and make use of a great deal of features of the app which are useful in the everyday life of a student.
+The student's timetable and lists of subjects would be conveniently available on the app for reference. Students can ensure they don't fall short on attendance in any subject by tracking their attendance easily without having to download an additional app for the same. If that wasn't enough to maintain a good attendance, we also give reminders to the user to attend class a few minutes in advance so that they don't accidentally miss out on anything.
+It is difficult to keep track of quizzes and assignment deadlines for all different subjects and therefore it is tedious for a student to plan their study hours. For this, all quizzes, exams and assignment deadlines would be neatly displayed in a user friendly calendar layout and timely reminders would be given for these tasks. The class representatives would have accounts with additional privileges to add/remove such tasks from the class calendar. 
+There are two types of people in the world: those who use light mode and those who use dark mode. PecPocket caters to both these types of people. 
+We also provide the user with a personal folder to store college related documents. They can store their dmcs, fee receipts, library cards and any other document of their choice here. It is more convenient to have such documents on the college app rather than saving these on some other location on your device.
+Along with the user’s personal documents, the app will also have a  designated resource for study material which would include previous year papers, documents, e-books as well as playlists links related to the subjects they have enrolled in. 
+All these features ensure the student a hassle free all-in-one application.
