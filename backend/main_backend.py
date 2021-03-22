@@ -82,7 +82,7 @@ def get_supers():
     result = supers_schema.dump(all_supers)
     return jsonify(result.data)
 
-# GET Single Product
+# GET Single Super
 @app.route('/super/<SID>', methods=['GET'])
 def get_super(SID):
     single_super = Super.query.get(SID)
