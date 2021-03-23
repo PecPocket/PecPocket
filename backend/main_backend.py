@@ -125,7 +125,7 @@ def update_super(SID):
     # returns the created json 
     return super_schema.jsonify(single_super)
 
-# Delete Product
+# Delete Super
 @app.route('/super/<SID>', methods=['DELETE'])
 def delete_super(SID):
     single_super = Super.query.get(SID)
@@ -232,7 +232,7 @@ def login():
             # correct sid, wrong password
             return jsonify({'code':404})
 
-# deleter from signup 
+# delete from signup 
 @app.route('/signup/<SID>', methods=['DELETE'])
 def delete_signup(SID):
     signup_info = SignUp.query.get(SID)
