@@ -6,7 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
 import bcrypt
-# from models import Super, SuperSchema, SignUp, SignUpSchema
+import json
+from json import JSONEncoder
+
+# class JSONEncoder
 
 # Init app
 app = Flask(__name__)
@@ -55,10 +58,25 @@ class SignUpSchema(ma.Schema):
     class Meta:
         fields = ("SID", "password")
 
-
 # Init Schema
 signup_schema = SignUpSchema()
 signups_schema = SignUpSchema(many=True)
+
+# Auth Table
+class Auth(db.Model):
+    SID = db.Column(db.Integer, primary_key=True)
+    auth = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, SID, auth):
+        self.SID = SID
+        self.auth = auth
+
+class AuthSchema(ma.Schema):
+    class Meta:
+        model = Auth
+
+# Init Schema
+auth_schema = AuthSchema()
 
 # Create a Super Row
 @app.route('/super', methods=['POST'])
@@ -80,14 +98,14 @@ def add_super():
 def get_supers():
     all_supers = Super.query.all()
     result = supers_schema.dump(all_supers)
-    return jsonify(result.data)
+    return jsonify(result)
 
 # GET Single Product
 @app.route('/super/<SID>', methods=['GET'])
 def get_super(SID):
     single_super = Super.query.get(SID)
     result = super_schema.dump(single_super)
-    return jsonify(result.data)
+    return jsonify(result)
 
 # Update a Super Row
 @app.route('/super/<SID>', methods=['PUT'])
@@ -125,18 +143,18 @@ def check_SID(SID):
 
     if not sid_in_super:
         # does not exists in database
-        return '401'
+        return jsonify({'code':401})
 
     if sid_in_super:
         sid_in_signup = SignUp.query.get(SID)
         # print(sid_in_signup)
         if sid_in_signup:
             # already signed in
-            return '402'
+            return jsonify({'code':402})
 
         if not sid_in_signup:
             # go ahead for password, valid user--> hasn't signed up
-            return '200'
+            return jsonify({'code':200})
         
 # adding signup info to the table
 @app.route('/signup', methods=['POST'])
@@ -150,7 +168,16 @@ def sign_up():
     db.session.add(new_signup)
     db.session.commit()
 
-    return signup_schema.jsonify(new_signup)
+    auth_info = Auth.query.get(SID)
+    if not auth_info:
+        # normal user --> no secy or CR
+        return jsonify({"code": 200, "auth": "0"})
+
+    
+    else :
+        # either a secy or a CR
+        output = json.dumps(auth_info.auth)
+        return jsonify({"code": 200, "auth": output})
 
 # GET All SignUp
 @app.route('/signup', methods=['GET'])
@@ -187,15 +214,23 @@ def login():
 
     if not signup_info:
         # not signed up
-        return '403'
+        return jsonify({'code':403})
 
     else :
         if bcrypt.checkpw(password.encode('utf-8'), signup_info.password):
             # correct sid and password
-            return '201'
+            auth_info = Auth.query.get(SID)
+            if not auth_info:
+                # normal user --> no secy or CR
+                return jsonify({'code': 200, 'auth': '0'})
+            
+            else :
+                # either a secy or a CR
+                output = json.dumps(auth_info.auth)
+                return jsonify({'code': 200, 'auth': output})
         else : 
             # correct sid, wrong password
-            return '404'
+            return jsonify({'code':404})
 
 # deleter from signup 
 @app.route('/signup/<SID>', methods=['DELETE'])
@@ -205,11 +240,57 @@ def delete_signup(SID):
     db.session.commit()
     return signup_schema.jsonify(signup_info)
 
+# Auth Table Management
+
+# Enter data into Auth Table
+@app.route('/auth', methods=['POST'])
+def add_auth():
+    SID = request.json['SID']
+    auth = request.json['auth']
+
+    new_auth = Auth(SID, auth)
+
+    db.session.add(new_auth)
+    db.session.commit()
+
+    return auth_schema.jsonify(new_auth)
+
+# Update Auth
+@app.route('/auth/<SID>', methods=['PUT'])
+def update_auth(SID):
+    auth_info = Auth.query.get(SID)
+
+    SID = request.json['SID']
+    auth = request.json['auth'] # new auth
+
+    auth_info.SID = SID
+    auth_info.password = auth
+
+    db.session.commit()
+
+    # returns the created json 
+    return auth_schema.jsonify(auth_info)
+
+
+# deleter from auth table
+@app.route('/auth/<SID>', methods=['DELETE'])
+def delete_auth(SID):
+    auth_info = Auth.query.get(SID)
+    db.session.delete(auth_info)
+    db.session.commit()
+    return auth_schema.jsonify(auth_info)
+
+
+
 # Run server
 if __name__ == '__main__':
     app.run(debug=True)
 
 
+# AUTH CODES
+# 0 --> Normal User
+# 1 --> CR
+# 2 --> Secy of some club/society
 
 # THE ONE BELOW WILL BE USED
 
