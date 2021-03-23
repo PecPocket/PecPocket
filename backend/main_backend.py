@@ -161,6 +161,12 @@ def sign_up():
     SID = request.json['SID']
     password = request.json['password']
 
+    # checking if already in sign up before proceeding
+    sid_in_signup = SignUp.query.get(SID)
+    if sid_in_signup:
+        # already igned up 
+        return jsonify({'code':402})
+
     hashed_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     new_signup = SignUp(SID, hashed_pwd)
 
@@ -194,14 +200,24 @@ def update_password(SID):
     SID = request.json['SID']
     password = request.json['password'] # new password
 
-    hashed_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    signup_info.SID = SID  
-    signup_info.password = hashed_pwd
+    # check if it exists in sign up table
+    if not signup_info:
+        # has not signed up yet
+        return jsonify({'code':403})
+    else:
+        # check if new password is same as the old one
+        if bcrypt.checkpw(password.encode('utf-8'), signup_info.password):
+            # new password == old password 
+            return jsonify({'code':301})
+        else :
+            # all good to update the password 
+            hashed_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            signup_info.SID = SID
+            signup_info.password = hashed_pwd
 
-    db.session.commit()
+            db.session.commit()
 
-    # returns the created json 
-    return jsonify({'code' : 200})
+            return jsonify({'code' : 200})
 
 # login
 @app.route('/login', methods=['POST'])
@@ -235,7 +251,13 @@ def login():
 @app.route('/signup/<SID>', methods=['DELETE'])
 def delete_signup(SID):
     signup_info = SignUp.query.get(SID)
-    print(signup_info)
+
+    # check if the user exists in sign up 
+    if not signup_info:
+        # has not signed up yet
+        return jsonify({'code':403})
+
+    # ask for password for extra confirmation --> maybe
 
     db.session.delete(signup_info)
     db.session.commit()
@@ -249,6 +271,12 @@ def delete_signup(SID):
 def add_auth():
     SID = request.json['SID']
     auth = request.json['auth']
+
+    # check if already exists in auth
+    sid_in_auth = Auth.query.get(SID)
+    if sid_in_auth:
+        # authorization already granted
+        return jsonify({'code':405})
 
     new_auth = Auth(SID, auth)
 
@@ -265,12 +293,24 @@ def update_auth(SID):
     SID = request.json['SID']
     auth = request.json['auth'] # new auth
 
+    # check if auth already exists
+    if not auth_info:
+        # no authorization granted --> can't update
+        return jsonify({'code': 406})
+
     auth_info.SID = SID
     auth_info.password = auth
 
+    # check if auth is changed to 0 
+    if auth == 0 :
+        # then remove from db
+        db.session.delete(auth_info)
+        db.session.commit()
+        return jsonify({'code':200})
+
+
     db.session.commit()
 
-    # returns the created json 
     return jsonify({'code':200})
 
 
@@ -278,6 +318,12 @@ def update_auth(SID):
 @app.route('/auth/<SID>', methods=['DELETE'])
 def delete_auth(SID):
     auth_info = Auth.query.get(SID)
+
+    # check if it even exists in auth 
+    if not auth_info:
+        # no authorization granted
+        return jsonify({'code':406})
+
     db.session.delete(auth_info)
     db.session.commit()
     return jsonify({'code':200})
@@ -292,15 +338,28 @@ if __name__ == '__main__':
 
 
 # STATUS CODES
+# 200 --> OK
+# 301 --> same password == old password
 # 401 --> SID does not exist
 # 402 --> already signed up
 # 403 --> not signed up
 # 404 --> correct sid, wrong password 
+# 405 --> authorization already granted
+# 406 --> no authorization granted 
 
 # AUTH CODES
 # 0 --> Normal User
 # 1 --> CR
 # 2 --> Secy of some club/society
+
+
+# ERROR HANDLING
+# 1. adding to sign up, check if already exists in sign up
+# 2. to change update password, first check if it even exists in the sign up, and if yes, first check if the old password is the same as in sign up or not
+# 3. to delete from sign up, check if it even exists in sign up, and also ask for password when deleting(not sure about that one)
+# 4. to add in auth, check if already exists in auth
+# 5. to update auth, first check if it even exists in auth, and if changed to 0, then delete from auth table
+# 6. to delete auth, first check if it even exists in auth table
 
 # THE ONE BELOW WILL BE USED
 
