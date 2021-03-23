@@ -7,12 +7,12 @@
 
     returns 
     {
-      "code" : code 
+      "code" : x 
      }
 
-    If SID does not exist, code =  401
-    If SID exists, but is alreaedy in SignUp Table, code =  402
-    If SID is valid, code =  200
+    x -> 401 If SID does not exist
+    x -> 402 If SID exists, but is alreaedy in SignUp Table
+    x -> 200 If SID is valid, code 
 
     eg 
     http://127.0.0.1:5000/signup/19193096 -- [GET]
@@ -21,7 +21,7 @@
     {
       "code" : 200
     }
-    if sid is valid for sign up
+    If sid is valid for sign up
   
 
 ## 2. To Sign up 
@@ -35,18 +35,24 @@
     }
 
 
-    returns 
+    returns - 
+    i. If entry with this sid already exists 
+    {
+      "code" : 402
+    }
+    
+    ii. If Sign Up successful
+    }
     {
       "code" : 200,
       "auth" : x
     }
-
     x depends on the auth level of the user, provided by the backend database
     auth 0 -> Student
     auth 1 -> CR
     auth 2 -> Secretary/Joint Secretary of Club/Society
 
-    The password is hashed before storing in the database
+    The password is hashed before storing in the database.
 
     eg
     http://127.0.0.1:5000/signup -- [POST]
@@ -72,7 +78,7 @@
 
     eg 
 
-    href - ../signup  -- [POST]
+    href - ../signup  -- [GET]
 
     body - 
     {
@@ -100,20 +106,24 @@
     }
     
     returns - 
-    
+
     {
-      'code' : 200
+      "code" : x
     }
+    x -> 403 if sid does not exist in sign up table
+    x -> 301 if new password same as old password
+    x -> 200 if updation of password is successful
+    
     
 ## 5. To Login 
   
     href - ../login -- [POST]
     body - 
-    
     {
     "SID" : sid,
     "password" : "pwd"
     }
+    pwd is the password of the given sid
     
     returns - 
     i. If no such sign up exists
@@ -135,14 +145,15 @@
     
 ## 6. To Delete From Sign Up
  
-      href - ../signup/<SID> -- [DELETE]
-      body - null
-      
-      returns - 
-      {
-        "code" : 200
-      }
-      for successful deletion
+    href - ../signup/<SID> -- [DELETE]
+    body - null
+    
+    returns - 
+    {
+      "code" : x
+    }
+    x -> 200 for successful deletion
+    x -> 403 if sign up does not exist
       
  ## 7. To Add In Auth
  
@@ -157,9 +168,10 @@
     
     returns - 
     {
-        "code" : 200
+        "code" : x
     }
-    for successful insertion
+    x -> 200 if addition of auth is successful
+    x -> 405 if auth of respective SID already exists
     
     
  ## 8. To Update Auth 
@@ -175,9 +187,10 @@
     
     returns - 
     {
-        "code" : 200
+        "code" : x
     }
-    for successful updation
+    x -> 406 if auth of given SID does not exist
+    x -> 200 if auth successfully updated
     
  ## 9. To Delete Auth
       
@@ -186,9 +199,10 @@
     
     returns - 
     {
-        "code" : 200
+        "code" : x
     }
-    for successful updation
+    x -> 406 if auth of given SID does not exist
+    x -> 200 if auth successfully deleted
  
     
   
