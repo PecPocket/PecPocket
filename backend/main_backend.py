@@ -26,15 +26,14 @@ ma = Marshmallow(app)
 # Super Table
 class Super(db.Model):
     SID = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(100), )
-    email = db.Column(db.String(100), )
+    name = db.Column(db.String(100),nullable=False )
+    email = db.Column(db.String(100),nullable=False )
 
     def __init__(self, SID, name, email):
         self.name = name
         self.SID = SID
         self.email = email
     
-# Super Schema
 class SuperSchema(ma.Schema):
     class Meta:
         fields = ("SID", "name", "email")
@@ -66,6 +65,45 @@ class Auth(db.Model):
 class AuthSchema(ma.Schema):
     class Meta:
         model = Auth
+    
+#Personal Table
+class Personal(db.Model):
+    SID = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    branch = db.Column(db.String(25), nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    semester = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, SID, name, branch, year, semester):
+        self.SID = SID
+        self.name = name
+        self.branch = branch
+        self.year = year
+        self.semester = semester
+
+class PersonalSchema(ma.Schema):
+    class Meta:
+        fields = ("SID", "name", "branch", "year", "semester")
+
+#Subject Table
+class Subject(db.Model):
+    branch = db.Column(db.String(25), primary_key = True)
+    semester = db.Column(db.Integer, primary_key = True)
+    sub_codes = db.Column(db.String(100), nullable = False)
+    elect_codes = db.Column(db.String(100))
+
+    def __init__(self, branch, semester, sub_codes, elect_codes):
+        self.branch = branch
+        self.semester = semester
+        self.sub_codes = sub_codes
+        self.elect_codes = elect_codes
+    
+class SubjectSchema(ma.Schema):
+    class Meta:
+        fields = ("branch", "semester", "sub_codes", "elect_codes")
+
+
+
 
 
 # Init Schema
@@ -76,6 +114,12 @@ signup_schema = SignUpSchema()
 signups_schema = SignUpSchema(many=True)
 
 auth_schema = AuthSchema()
+
+personal_schema = PersonalSchema()
+personals_schema = PersonalSchema(many=True)
+
+subject_schema = SubjectSchema()
+subjects_schema = SubjectSchema(many=True)
 
 # Create a Super Row
 @app.route('/super', methods=['POST'])
