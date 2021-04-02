@@ -26,41 +26,41 @@ ma = Marshmallow(app)
 # Super Table
 class Super(db.Model):
     SID = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(100),nullable=False )
-    email = db.Column(db.String(100),nullable=False )
+    Name = db.Column(db.String(100),nullable=False )
+    Email = db.Column(db.String(100),nullable=False )
 
-    def __init__(self, SID, name, email):
-        self.name = name
+    def __init__(self, SID, Name, Email):
+        self.Name = Name
         self.SID = SID
-        self.email = email
+        self.Email = Email
     
 class SuperSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "name", "email")
+        fields = ("SID", "Name", "Email")
 
 
 # Sign Up Table
 class SignUp(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
-    password = db.Column(db.String(50), nullable=False)
+    Password = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, SID, password):
+    def __init__(self, SID, Password):
         self.SID = SID
-        self.password = password
+        self.Password = Password
 
 class SignUpSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "password")
+        fields = ("SID", "Password")
 
 
 # Auth Table
 class Auth(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
-    auth = db.Column(db.Integer, nullable=False)
+    Auth = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, SID, auth):
+    def __init__(self, SID, Auth):
         self.SID = SID
-        self.auth = auth
+        self.Auth = Auth
 
 class AuthSchema(ma.Schema):
     class Meta:
@@ -69,38 +69,38 @@ class AuthSchema(ma.Schema):
 #Personal Table
 class Personal(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    branch = db.Column(db.String(25), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    semester = db.Column(db.Integer, nullable=False)
+    Name = db.Column(db.String(100), nullable=False)
+    Branch = db.Column(db.String(25), nullable=False)
+    Year = db.Column(db.Integer, nullable=False)
+    Semester = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, SID, name, branch, year, semester):
+    def __init__(self, SID, Name, Branch, Year, Semester):
         self.SID = SID
-        self.name = name
-        self.branch = branch
-        self.year = year
-        self.semester = semester
+        self.Name = Name
+        self.Branch = Branch
+        self.Year = Year
+        self.Semester = Semester
 
 class PersonalSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "name", "branch", "year", "semester")
+        fields = ("SID", "Name", "Branch", "Year", "Semester")
 
 #Subject Table
 class Subject(db.Model):
-    branch = db.Column(db.String(25), primary_key = True)
-    semester = db.Column(db.Integer, primary_key = True)
-    sub_codes = db.Column(db.String(100), nullable = False)
-    elect_codes = db.Column(db.String(100))
+    Branch = db.Column(db.String(25), primary_key = True)
+    Semester = db.Column(db.Integer, primary_key = True)
+    Sub_codes = db.Column(db.String(100), nullable = False)
+    Elect_codes = db.Column(db.String(100))
 
-    def __init__(self, branch, semester, sub_codes, elect_codes):
-        self.branch = branch
-        self.semester = semester
-        self.sub_codes = sub_codes
-        self.elect_codes = elect_codes
+    def __init__(self, Branch, Semester, Sub_codes, Elect_codes):
+        self.Branch = Branch
+        self.Semester = Semester
+        self.Sub_codes = Sub_codes
+        self.Elect_codes = Elect_codes
     
 class SubjectSchema(ma.Schema):
     class Meta:
-        fields = ("branch", "semester", "sub_codes", "elect_codes")
+        fields = ("Branch", "Semester", "Sub_codes", "Elect_codes")
 
 
 
@@ -113,7 +113,7 @@ supers_schema = SuperSchema(many=True)
 signup_schema = SignUpSchema()
 signups_schema = SignUpSchema(many=True)
 
-auth_schema = AuthSchema()
+Auth_schema = AuthSchema()
 
 personal_schema = PersonalSchema()
 personals_schema = PersonalSchema(many=True)
@@ -125,10 +125,10 @@ subjects_schema = SubjectSchema(many=True)
 @app.route('/super', methods=['POST'])
 def add_super():
     SID = request.json['SID']
-    name = request.json['name']
-    email = request.json['email']
+    Name = request.json['Name']
+    Email = request.json['Email']
 
-    new_super = Super(SID, name, email)
+    new_super = Super(SID, Name, Email)
 
     db.session.add(new_super)
     db.session.commit()
@@ -156,12 +156,12 @@ def update_super(SID):
     single_super = Super.query.get(SID)
 
     SID = request.json['SID']
-    name = request.json['name']
-    email = request.json['email']
+    Name = request.json['Name']
+    Email = request.json['Email']
 
     single_super.SID = SID
-    single_super.name = name
-    single_super.email = email 
+    single_super.Name = Name
+    single_super.Email = Email 
 
     db.session.commit()
 
@@ -196,14 +196,14 @@ def check_SID(SID):
             return jsonify({'code':402})
 
         if not sid_in_signup:
-            # go ahead for password, valid user--> hasn't signed up
+            # go ahead for Password, valid user--> hasn't signed up
             return jsonify({'code':200})
         
 # adding signup info to the table
 @app.route('/signup', methods=['POST'])
 def sign_up():
     SID = request.json['SID']
-    password = request.json['password']
+    Password = request.json['Password']
 
     # checking if already in sign up before proceeding
     sid_in_signup = SignUp.query.get(SID)
@@ -211,22 +211,22 @@ def sign_up():
         # already igned up 
         return jsonify({'code':402})
 
-    hashed_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    hashed_pwd = bcrypt.hashpw(Password.encode('utf-8'), bcrypt.gensalt())
     new_signup = SignUp(SID, hashed_pwd)
 
     db.session.add(new_signup)
     db.session.commit()
 
-    auth_info = Auth.query.get(SID)
-    if not auth_info:
+    Auth_info = Auth.query.get(SID)
+    if not Auth_info:
         # normal user --> no secy or CR
-        return jsonify({"code": 200, "auth": 0})
+        return jsonify({"code": 200, "Auth": 0})
 
     
     else :
         # either a secy or a CR
-        output = json.dumps(auth_info.auth)
-        return jsonify({"code": 200, "auth": int(output)})
+        output = json.dumps(Auth_info.Auth)
+        return jsonify({"code": 200, "Auth": int(output)})
 
 # GET All SignUp
 @app.route('/signup', methods=['GET'])
@@ -236,28 +236,28 @@ def get_signups():
     return jsonify(result)
 
 
-# change/update password
+# change/update Password
 @app.route('/signup/<SID>', methods=['PUT'])
-def update_password(SID):
+def update_Password(SID):
     signup_info = SignUp.query.get(SID)
 
     SID = request.json['SID']
-    password = request.json['password'] # new password
+    Password = request.json['Password'] # new Password
 
     # check if it exists in sign up table
     if not signup_info:
         # has not signed up yet
         return jsonify({'code':403})
     else:
-        # check if new password is same as the old one
-        if bcrypt.checkpw(password.encode('utf-8'), signup_info.password):
-            # new password == old password 
+        # check if new Password is same as the old one
+        if bcrypt.checkpw(Password.encode('utf-8'), signup_info.Password):
+            # new Password == old Password 
             return jsonify({'code':301})
         else :
-            # all good to update the password 
-            hashed_pwd = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            # all good to update the Password 
+            hashed_pwd = bcrypt.hashpw(Password.encode('utf-8'), bcrypt.gensalt())
             signup_info.SID = SID
-            signup_info.password = hashed_pwd
+            signup_info.Password = hashed_pwd
 
             db.session.commit()
 
@@ -267,7 +267,7 @@ def update_password(SID):
 @app.route('/login', methods=['POST'])
 def login():
     SID = request.json['SID']
-    password = request.json['password']
+    Password = request.json['Password']
 
     signup_info = SignUp.query.get(SID)
 
@@ -276,19 +276,19 @@ def login():
         return jsonify({'code':403})
 
     else :
-        if bcrypt.checkpw(password.encode('utf-8'), signup_info.password):
-            # correct sid and password
-            auth_info = Auth.query.get(SID)
-            if not auth_info:
+        if bcrypt.checkpw(Password.encode('utf-8'), signup_info.Password):
+            # correct sid and Password
+            Auth_info = Auth.query.get(SID)
+            if not Auth_info:
                 # normal user --> no secy or CR
-                return jsonify({'code': 200, 'auth': 0})
+                return jsonify({'code': 200, 'Auth': 0})
             
             else :
                 # either a secy or a CR
-                output = json.dumps(auth_info.auth)
-                return jsonify({'code': 200, 'auth': int(output)})
+                output = json.dumps(Auth_info.Auth)
+                return jsonify({'code': 200, 'Auth': int(output)})
         else : 
-            # correct sid, wrong password
+            # correct sid, wrong Password
             return jsonify({'code':404})
 
 # delete from signup 
@@ -301,7 +301,7 @@ def delete_signup(SID):
         # has not signed up yet
         return jsonify({'code':403})
 
-    # ask for password for extra confirmation --> maybe
+    # ask for Password for extra confirmation --> maybe
 
     db.session.delete(signup_info)
     db.session.commit()
@@ -311,44 +311,44 @@ def delete_signup(SID):
 # Auth Table Management
 
 # Enter data into Auth Table
-@app.route('/auth', methods=['POST'])
-def add_auth():
+@app.route('/Auth', methods=['POST'])
+def add_Auth():
     SID = request.json['SID']
-    auth = request.json['auth']
+    Auth = request.json['Auth']
 
-    # check if already exists in auth
-    sid_in_auth = Auth.query.get(SID)
-    if sid_in_auth:
-        # authorization already granted
+    # check if already exists in Auth
+    sid_in_Auth = Auth.query.get(SID)
+    if sid_in_Auth:
+        # Authorization already granted
         return jsonify({'code':405})
 
-    new_auth = Auth(SID, auth)
+    new_Auth = Auth(SID, Auth)
 
-    db.session.add(new_auth)
+    db.session.add(new_Auth)
     db.session.commit()
 
     return jsonify({'code':200})
 
 # Update Auth
-@app.route('/auth/<SID>', methods=['PUT'])
-def update_auth(SID):
-    auth_info = Auth.query.get(SID)
+@app.route('/Auth/<SID>', methods=['PUT'])
+def update_Auth(SID):
+    Auth_info = Auth.query.get(SID)
 
     SID = request.json['SID']
-    auth = request.json['auth'] # new auth
+    auth = request.json['Auth'] # new Auth
 
-    # check if auth already exists
-    if not auth_info:
-        # no authorization granted --> can't update
+    # check if Auth already exists
+    if not Auth_info:
+        # no Authorization granted --> can't update
         return jsonify({'code': 406})
 
-    auth_info.SID = SID
-    auth_info.password = auth
+    Auth_info.SID = SID
+    Auth_info.Password = auth
 
-    # check if auth is changed to 0 
-    if auth == 0 :
+    # check if Auth is changed to 0 
+    if Auth == 0 :
         # then remove from db
-        db.session.delete(auth_info)
+        db.session.delete(Auth_info)
         db.session.commit()
         return jsonify({'code':200})
 
@@ -358,17 +358,17 @@ def update_auth(SID):
     return jsonify({'code':200})
 
 
-# deleter from auth table
-@app.route('/auth/<SID>', methods=['DELETE'])
-def delete_auth(SID):
-    auth_info = Auth.query.get(SID)
+# deleter from Auth table
+@app.route('/Auth/<SID>', methods=['DELETE'])
+def delete_Auth(SID):
+    Auth_info = Auth.query.get(SID)
 
-    # check if it even exists in auth 
-    if not auth_info:
-        # no authorization granted
+    # check if it even exists in Auth 
+    if not Auth_info:
+        # no Authorization granted
         return jsonify({'code':406})
 
-    db.session.delete(auth_info)
+    db.session.delete(Auth_info)
     db.session.commit()
     return jsonify({'code':200})
 
@@ -383,15 +383,15 @@ if __name__ == '__main__':
 
 # STATUS CODES
 # 200 --> OK
-# 301 --> same password == old password
+# 301 --> same Password == old Password
 # 401 --> SID does not exist
 # 402 --> already signed up
 # 403 --> not signed up
-# 404 --> correct sid, wrong password 
-# 405 --> authorization already granted
-# 406 --> no authorization granted 
+# 404 --> correct sid, wrong Password 
+# 405 --> Authorization already granted
+# 406 --> no Authorization granted 
 
-# AUTH CODES
+# Auth CODES
 # 0 --> Normal User
 # 1 --> CR
 # 2 --> Secy of some club/society
@@ -399,11 +399,11 @@ if __name__ == '__main__':
 
 # ERROR HANDLING
 # 1. adding to sign up, check if already exists in sign up
-# 2. to change update password, first check if it even exists in the sign up, and if yes, first check if the old password is the same as in sign up or not
-# 3. to delete from sign up, check if it even exists in sign up, and also ask for password when deleting(not sure about that one)
-# 4. to add in auth, check if already exists in auth
-# 5. to update auth, first check if it even exists in auth, and if changed to 0, then delete from auth table
-# 6. to delete auth, first check if it even exists in auth table
+# 2. to change update Password, first check if it even exists in the sign up, and if yes, first check if the old Password is the same as in sign up or not
+# 3. to delete from sign up, check if it even exists in sign up, and also ask for Password when deleting(not sure about that one)
+# 4. to add in Auth, check if already exists in Auth
+# 5. to update Auth, first check if it even exists in Auth, and if changed to 0, then delete from Auth table
+# 6. to delete Auth, first check if it even exists in Auth table
 
 # THE ONE BELOW WILL BE USED
 
@@ -415,8 +415,8 @@ if __name__ == '__main__':
 # if does not exist in super return 401, "does not exist"
 # if exists in super but also exists in sign up , send 402, "already exists"
 
-# he'll let them make a password
-# kauts will send us a POST request on /signup/<SID> with a body with the sid and password
-# when saving into the signup table, we hash the password
+# he'll let them make a Password
+# kauts will send us a POST request on /signup/<SID> with a body with the sid and Password
+# when saving into the signup table, we hash the Password
 
 

@@ -31,7 +31,7 @@
     body - 
     {
       "SID" : sid,
-      "password" : "pwd"
+      "Password" : "pwd"
     }
 
 
@@ -45,27 +45,27 @@
     }
     {
       "code" : 200,
-      "auth" : x
+      "Auth" : x
     }
-    x depends on the auth level of the user, provided by the backend database
-    auth 0 -> Student
-    auth 1 -> CR
-    auth 2 -> Secretary/Joint Secretary of Club/Society
+    x depends on the Auth level of the user, provided by the backend database
+    Auth 0 -> Student
+    Auth 1 -> CR
+    Auth 2 -> Secretary/Joint Secretary of Club/Society
 
-    The password is hashed before storing in the database.
+    The Password is hashed before storing in the database.
 
     eg
     http://127.0.0.1:5000/signup -- [POST]
     body - 
     {
       "SID" : 19103096,
-      "password" : "testpwd"
+      "Password" : "testpwd"
     }
 
     returns - 
     {
       "code" : 200,
-      "auth" : 1
+      "Auth" : 1
     }
 
   
@@ -83,15 +83,15 @@
     body - 
     {
       "SID" : 19103001,
-      "password" : "dfasjdfasdfvasdfviuasbdfgfvb2343892"
+      "Password" : "dfasjdfasdfvasdfviuasbdfgfvb2343892"
     }
     {
       "SID" : 19103096,
-      "password" : "fajsdfasidfuafwoberfvijbasdfv"
+      "Password" : "fajsdfasidfuafwoberfvijbasdfv"
     }
     {
       "SID" : 19103099,
-      "password" : "sadfawsfiuwebrgiuyedbsdfgasfaergar"
+      "Password" : "sadfawsfiuwebrgiuyedbsdfgasfaergar"
     }
 
 
@@ -102,7 +102,7 @@
     body - 
     {
       "SID" : sid,
-      "password" : "newpassword"
+      "Password" : "newPassword"
     }
     
     returns - 
@@ -111,8 +111,8 @@
       "code" : x
     }
     x -> 403 if sid does not exist in sign up table
-    x -> 301 if new password same as old password
-    x -> 200 if updation of password is successful
+    x -> 301 if new Password same as old Password
+    x -> 200 if updation of Password is successful
     
     
 ## 5. To Login 
@@ -121,9 +121,9 @@
     body - 
     {
     "SID" : sid,
-    "password" : "pwd"
+    "Password" : "pwd"
     }
-    pwd is the password of the given sid
+    pwd is the Password of the given sid
     
     returns - 
     i. If no such sign up exists
@@ -131,7 +131,7 @@
       "code" : 403
     }
     
-    ii. If sign up exists but password entered is wrong
+    ii. If sign up exists but Password entered is wrong
     {
       "code" : 404
     }
@@ -139,9 +139,9 @@
     iii. 
     {
       "code" : 200,
-      "auth" : x
+      "Auth" : x
     }
-    x depending on the auth of the user.
+    x depending on the Auth of the user.
     
 ## 6. To Delete From Sign Up
  
@@ -157,11 +157,11 @@
       
  ## 7. To Add In Auth
  
-    href - ../auth -- [POST]
+    href - ../Auth -- [POST]
     body - 
     {
       "SID" : sid, 
-      "auth" : x
+      "Auth" : x
     }
     x can be 1 or 2
     for x = 0, entry is not added in the Auth Table
@@ -170,17 +170,17 @@
     {
         "code" : x
     }
-    x -> 200 if addition of auth is successful
-    x -> 405 if auth of respective SID already exists
+    x -> 200 if addition of Auth is successful
+    x -> 405 if Auth of respective SID already exists
     
     
  ## 8. To Update Auth 
     
-    href - ../auth/<SID> -- [PUT]
+    href - ../Auth/<SID> -- [PUT]
     body - 
     {
       "SID" : sid, 
-      "auth" : newAuth
+      "Auth" : newAuth
     }
     newAuth can be 1 or 2
     for newAuth = 0, entry is not added in the Auth Table
@@ -189,20 +189,20 @@
     {
         "code" : x
     }
-    x -> 406 if auth of given SID does not exist
-    x -> 200 if auth successfully updated
+    x -> 406 if Auth of given SID does not exist
+    x -> 200 if Auth successfully updated
     
  ## 9. To Delete Auth
       
-    href - ../auth/<SID> -- [DELETE]
+    href - ../Auth/<SID> -- [DELETE]
     body - null
     
     returns - 
     {
         "code" : x
     }
-    x -> 406 if auth of given SID does not exist
-    x -> 200 if auth successfully deleted
+    x -> 406 if Auth of given SID does not exist
+    x -> 200 if Auth successfully deleted
  
     
   
