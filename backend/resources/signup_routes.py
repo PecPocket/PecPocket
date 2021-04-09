@@ -30,8 +30,8 @@ def check_SID(SID):
 
 # branch dict
 branch_dict = {1:'Aerospace Engineering', 2:'Civil Engineering', 3:'Computer Science Engineering', 4:'Electrical Engineering', 
-5:'Electronics & Communication Engineering', 6:'Production & Industrial Engineering', 7: 'Mechanical Engineering', 
-8: 'Materials & Metallurgical Engineering'}
+5:'Electronics & Communication Engineering',  7: 'Mechanical Engineering', 
+8: 'Materials & Metallurgical Engineering', 9:'Production & Industrial Engineering',}
 
 # get branch
 def getBranch(SID):
