@@ -3,7 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from database.extensions import initialize_db
+from database.extensions import initialize_db, db as root_db
 import os
 from resources.super_routes import superblue
 from resources.signup_routes import signblue
@@ -12,7 +12,7 @@ from resources.subject_routes import subjectblue
 from resources.club_routes import clubblue
 from resources.sub_conv_routes import sub_convblue
 from resources.club_conv_routes import club_convblue
-from resources.back_elect_routes import back_electblue
+from resources.back_elect_routes import back_electblue 
 
 app = Flask(__name__)
 

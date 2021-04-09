@@ -168,3 +168,4 @@ clubs_schema = ClubSchema(many=True)
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
 
+db.create_all()
