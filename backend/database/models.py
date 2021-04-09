@@ -21,7 +21,7 @@ class SuperSchema(ma.Schema):
     class Meta:
         fields = ("SID", "Name", "Email")
 
-# # Sign Up Table
+# Sign Up Table
 class SignUp(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Password = db.Column(db.String(50), nullable=False)
@@ -85,6 +85,61 @@ class SubjectSchema(ma.Schema):
         fields = ("Branch", "Semester", "Sub_codes", "Elect_codes")
 
 
+# Back_elect_sub Table
+class BackElectSub(db.Model):
+    SID = db.Column(db.Integer, primary_key=True)
+    Sub_codes = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, SID, Sub_codes):
+        self.SID = SID
+        self.Sub_codes = Sub_codes
+
+class BackElectSubSchema(ma.Schema):
+    class Meta:
+        fields = ("SID", "Sub_codes")
+
+
+# Sub convertor
+class SubConvertor(db.Model):
+    Sub_code = db.Column(db.String(100), primary_key=True, nullable=False)
+    Subject = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, Sub_code, Subject):
+        self.Sub_code = Sub_code
+        self.Subject = Subject
+
+class SubConvertorSchema(ma.Schema):
+    class Meta:
+        fields = ("Sub_code", "Subject")
+
+
+# Clubs Table
+class Clubs(db.Model):
+    SID = db.Column(db.Integer, primary_key=True)
+    Club_codes = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, SID, Club_codes):
+        self.SID = SID
+        self.Club_codes = Club_codes
+
+class ClubSchema(ma.Schema):
+    class Meta:
+        fields = ("SID", "Club_codes")
+
+
+# Club convertor
+class ClubConvertor(db.Model):
+    Club_code = db.Column(db.String(100), nullable=False)
+    Club = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, Club_code, Club):
+        self.Club_code = Club_code
+        self.Club = Club
+
+class ClubConvertorSchema(ma.Schema):
+    class Meta:
+        fields = ("Club_code", "Club")
+
 
 # Init Schema
 super_schema = SuperSchema()
@@ -101,5 +156,15 @@ personals_schema = PersonalSchema(many=True)
 subject_schema = SubjectSchema()
 subjects_schema = SubjectSchema(many=True)
 
+back_elect_sub_schema = BackElectSubSchema()
+back_elect_subs_schema = BackElectSubSchema(many=True)
         
+sub_convertor_schema = SubConvertorSchema()
+sub_convertors_schema = SubConvertorSchema(many=True)
+
+club_schema = ClubSchema()
+clubs_schema = ClubSchema(many=True)
+
+club_convertor_schema = ClubConvertorSchema()
+club_convertors_schema = ClubConvertorSchema(many=True)
 

@@ -8,6 +8,8 @@ import os
 from resources.super_routes import superblue
 from resources.signup_routes import signblue
 from resources.auth_routes import authblue
+from resources.subject_routes import subjectblue
+from resources.club_routes import clubblue
 
 app = Flask(__name__)
 
@@ -21,5 +23,7 @@ initialize_db(app)
 app.register_blueprint(superblue)
 app.register_blueprint(signblue)
 app.register_blueprint(authblue)
+app.register_blueprint(subjectblue)
+app.register_blueprint(clubblue)
 
 app.run()

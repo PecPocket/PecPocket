@@ -27,7 +27,18 @@ def check_SID(SID):
         if not sid_in_signup:
             # go ahead for Password, valid user--> hasn't signed up
             return jsonify({'code':200})
-        
+
+# branch dict
+branch_dict = {1:'Aerospace Engineering', 2:'Civil Engineering', 3:'Computer Science Engineering', 4:'Electrical Engineering', 
+5:'Electronics & Communication Engineering', 6:'Production & Industrial Engineering', 7: 'Mechanical Engineering', 
+8: 'Materials & Metallurgical Engineering'}
+
+# get branch
+def getBranch(SID):
+    branch_code = SID[5]
+    branch_name = branch_dict[branch_code]
+    return branch_name
+
 # adding signup info to the table
 @signblue.route('/signup', methods=['POST'])
 def sign_up():
@@ -44,6 +55,25 @@ def sign_up():
     new_signup = SignUp(SID, hashed_pwd)
 
     db.session.add(new_signup)
+    db.session.commit()
+    
+    # get name from super 
+    super_details = Super.query.get(SID)
+    Name = super_details.Name
+
+    # get branch name
+    Branch = getBranch(SID)
+
+    # get year
+    Year = 0
+
+    # get semester
+    Semester = 0
+
+    # add to personal 
+    new_personal = Personal(SID, Name, Branch, Year, Semester)
+
+    db.session(new_personal)
     db.session.commit()
 
     auth_info = Auth.query.get(SID)
