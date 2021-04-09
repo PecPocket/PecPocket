@@ -10,6 +10,9 @@ from resources.signup_routes import signblue
 from resources.auth_routes import authblue
 from resources.subject_routes import subjectblue
 from resources.club_routes import clubblue
+from resources.sub_conv_routes import sub_convblue
+from resources.club_conv_routes import club_convblue
+from resources.back_elect_routes import back_electblue
 
 app = Flask(__name__)
 
@@ -25,5 +28,8 @@ app.register_blueprint(signblue)
 app.register_blueprint(authblue)
 app.register_blueprint(subjectblue)
 app.register_blueprint(clubblue)
+app.register_blueprint(sub_convblue)
+app.register_blueprint(club_convblue)
+app.register_blueprint(back_electblue)
 
 app.run()
