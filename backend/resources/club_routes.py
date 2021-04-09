@@ -39,7 +39,7 @@ def update_club(SID):
 
 
 # Delete Club
-@superblue.route('/club/<SID>', methods=['DELETE'])
+@clubblue.route('/club/<SID>', methods=['DELETE'])
 def delete_club(SID):
     club_detail = Clubs.query.get(SID)
     db.session.delete(club_detail)

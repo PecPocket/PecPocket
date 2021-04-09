@@ -4,7 +4,7 @@ from flask import Blueprint, Response, request, jsonify
 from database.models import BackElectSub, BackElectSubSchema, back_elect_sub_schema, back_elect_subs_schema
 from database.extensions import db, ma
 
-back_electblue = Blueprint("club_convblue", __name__)
+back_electblue = Blueprint("back_electblue", __name__)
 
 #Create a BackElectSub Row
 @back_electblue.route('/backElect', methods=['POST'])

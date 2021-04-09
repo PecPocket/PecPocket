@@ -129,7 +129,7 @@ class ClubSchema(ma.Schema):
 
 # Club convertor
 class ClubConvertor(db.Model):
-    Club_code = db.Column(db.String(100), nullable=False)
+    Club_code = db.Column(db.String(100), primary_key=True, nullable=False)
     Club = db.Column(db.String(50), nullable=False)
 
     def __init__(self, Club_code, Club):

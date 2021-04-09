@@ -45,7 +45,7 @@ def update_subject(Branch, Semester):
 
 
 # Delete Subject
-@superblue.route('/subject/<Branch>/<Semester>', methods=['DELETE'])
+@subjectblue.route('/subject/<Branch>/<Semester>', methods=['DELETE'])
 def delete_subject(Branch, Semester):
     subject_detail = Subject.query.get(Branch, Semester)
     db.session.delete(subject_detail)
