@@ -43,8 +43,8 @@ def update_sub_conv(Sub_code):
     Sub_code = request.json['Sub_code']
     Subject = request.json['Subject']
 
-    subject_detail.Sub_code = Sub_code
-    subject_detail.Subject = Subject
+    sub_conv_detail.Sub_code = Sub_code
+    sub_conv_detail.Subject = Subject
 
     db.session.commit()
 

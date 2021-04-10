@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Auth
+from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Auth, Personal
 from database.extensions import db, ma
 import bcrypt
 
@@ -35,8 +35,8 @@ branch_dict = {1:'Aerospace Engineering', 2:'Civil Engineering', 3:'Computer Sci
 
 # get branch
 def getBranch(SID):
-    branch_code = SID[5]
-    branch_name = branch_dict[branch_code]
+    branch_code = str(SID)[5]
+    branch_name = branch_dict[int(branch_code)]
     return branch_name
 
 # adding signup info to the table
@@ -48,7 +48,7 @@ def sign_up():
     # checking if already in sign up before proceeding
     sid_in_signup = SignUp.query.get(SID)
     if sid_in_signup:
-        # already igned up 
+        # already signed up 
         return jsonify({'code':402})
 
     hashed_pwd = bcrypt.hashpw(Password.encode('utf-8'), bcrypt.gensalt())
@@ -73,8 +73,8 @@ def sign_up():
     # add to personal 
     new_personal = Personal(SID, Name, Branch, Year, Semester)
 
-    db.session(new_personal)
-    db.session.commit()
+    # db.session(new_personal)
+    # db.session.commit()
 
     auth_info = Auth.query.get(SID)
     if not auth_info:

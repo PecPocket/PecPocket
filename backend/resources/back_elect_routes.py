@@ -23,14 +23,14 @@ def add_back_elect():
 
 # Update a BackElectSub Row
 @back_electblue.route('/backElect/<SID>', methods=['PUT'])
-def update_subject(SID):
+def update_back_elect(SID):
     back_elect_detail = BackElectSub.query.get(SID)
 
     SID = request.json['SID']
     Sub_codes = request.json['Sub_codes']
 
-    subject_detail.SID = SID
-    subject_detail.Sub_codes = Sub_codes
+    back_elect_detail.SID = SID
+    back_elect_detail.Sub_codes = Sub_codes
 
     db.session.commit()
 

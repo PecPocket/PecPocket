@@ -32,4 +32,4 @@ app.register_blueprint(sub_convblue)
 app.register_blueprint(club_convblue)
 app.register_blueprint(back_electblue)
 
-app.run()
+app.run(debug=True)

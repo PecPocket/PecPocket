@@ -14,7 +14,7 @@ def get_club_convs():
     return jsonify(result)
 
 # GET Single ClubConvertor
-@club_convblue.route('/ClubConvertor/<Club_code>', methods=['GET'])
+@club_convblue.route('/clubConvertor/<Club_code>', methods=['GET'])
 def get_club_conv(Club_code):
     club_conv_detail = ClubConvertor.query.get(Club_code)
     result = club_convertor_schema.dump(club_conv_detail)
@@ -36,15 +36,15 @@ def add_club_conv():
 
 
 # Update a ClubConvertor Row
-@club_convblue.route('/clubConvertor/<Sub_code>', methods=['PUT'])
+@club_convblue.route('/clubConvertor/<Club_code>', methods=['PUT'])
 def update_club_conv(Club_code):
     club_conv_detail = ClubConvertor.query.get(Club_code)
 
     Club_code = request.json['Club_code']
     Club = request.json['Club']
 
-    subject_detail.Club_code = Club_code
-    subject_detail.Club = Club
+    club_conv_detail.Club_code = Club_code
+    club_conv_detail.Club = Club
 
     db.session.commit()
 
@@ -53,7 +53,7 @@ def update_club_conv(Club_code):
 
 
 # Delete ClubConvertor
-@club_convblue.route('/clubConvertor/<Sub_code>', methods=['DELETE'])
+@club_convblue.route('/clubConvertor/<Club_code>', methods=['DELETE'])
 def delete_club_conv(Club_code):
     club_conv_detail = ClubConvertor.query.get(Club_code)
     db.session.delete(club_conv_detail)
