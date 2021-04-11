@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Auth, AuthSchema, auth_schema
+from database.models import Authorization, AuthorizationSchema, authorization_schema
 from database.extensions import db, ma
 
 authblue = Blueprint("authblue", __name__)
@@ -11,15 +11,15 @@ authblue = Blueprint("authblue", __name__)
 @authblue.route('/auth', methods=['POST'])
 def add_auth():
     SID = request.json['SID']
-    auth = request.json['Auth']
+    Auth = request.json['Auth']
 
     # check if already exists in Auth
-    sid_in_auth = Auth.query.get(SID)
+    sid_in_auth = Authorization.query.get(SID)
     if sid_in_auth:
         # Authorization already granted
         return jsonify({'code':405})
 
-    new_auth = Auth(SID, auth)
+    new_auth = Authorization(SID, Auth)
 
     db.session.add(new_auth)
     db.session.commit()
@@ -29,14 +29,14 @@ def add_auth():
 # GET Auth
 @authblue.route('/auth/<SID>', methods=['GET'])
 def get_auth(SID):
-    auth_info = Auth.query.get(SID)
-    result = auth_schema.dump(auth_info)
+    auth_info = Authorization.query.get(SID)
+    result = authorization_schema.dump(auth_info)
     return jsonify(result)
 
 # Update Auth
 @authblue.route('/auth/<SID>', methods=['PUT'])
 def update_Auth(SID):
-    auth_info = Auth.query.get(SID)
+    auth_info = Authorization.query.get(SID)
 
     SID = request.json['SID']
     auth = request.json['Auth'] # new Auth
@@ -65,7 +65,7 @@ def update_Auth(SID):
 # deleter from Auth table
 @authblue.route('/auth/<SID>', methods=['DELETE'])
 def delete_Auth(SID):
-    auth_info = Auth.query.get(SID)
+    auth_info = Authorization.query.get(SID)
 
     # check if it even exists in Auth 
     if not auth_info:
