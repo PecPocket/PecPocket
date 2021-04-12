@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Auth, Personal
+from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Authorization, Personal
 from database.extensions import db, ma
 import bcrypt
 
@@ -76,7 +76,7 @@ def sign_up():
     # db.session(new_personal)
     # db.session.commit()
 
-    auth_info = Auth.query.get(SID)
+    auth_info = Authorization.query.get(SID)
     if not auth_info:
         # normal user --> no secy or CR
         return jsonify({"code": 200, "Auth": 0})
@@ -137,7 +137,7 @@ def login():
     else :
         if bcrypt.checkpw(Password.encode('utf-8'), signup_info.Password):
             # correct sid and Password
-            auth_info = Auth.query.get(SID)
+            auth_info = Authorization.query.get(SID)
             if not auth_info:
                 # normal user --> no secy or CR
                 return jsonify({'code': 200, 'Auth': 0})

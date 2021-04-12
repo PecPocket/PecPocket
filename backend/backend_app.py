@@ -23,6 +23,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'da
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 initialize_db(app)
+
 app.register_blueprint(superblue)
 app.register_blueprint(signblue)
 app.register_blueprint(authblue)

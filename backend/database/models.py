@@ -5,7 +5,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
-
 # Super Table
 class Super(db.Model):
     SID = db.Column(db.Integer, primary_key = True)
@@ -34,8 +33,8 @@ class SignUpSchema(ma.Schema):
     class Meta:
         fields = ("SID", "Password")
 
-# Auth Table
-class Auth(db.Model):
+# Authorization Table
+class Authorization(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Auth = db.Column(db.Integer, nullable=False)
 
@@ -43,9 +42,9 @@ class Auth(db.Model):
         self.SID = SID
         self.Auth = Auth
 
-class AuthSchema(ma.Schema):
+class AuthorizationSchema(ma.Schema):
     class Meta:
-        model = Auth
+        model = Authorization
 
 class Personal(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
@@ -148,7 +147,7 @@ supers_schema = SuperSchema(many=True)
 signup_schema = SignUpSchema()
 signups_schema = SignUpSchema(many=True)
 
-auth_schema = AuthSchema()
+authorization_schema = AuthorizationSchema()
 
 personal_schema = PersonalSchema()
 personals_schema = PersonalSchema(many=True)
@@ -167,5 +166,3 @@ clubs_schema = ClubSchema(many=True)
 
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
-
-# db.create_all()
