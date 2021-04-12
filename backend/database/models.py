@@ -33,6 +33,7 @@ class SignUpSchema(ma.Schema):
     class Meta:
         fields = ("SID", "Password")
 
+
 # Authorization Table
 class Authorization(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
@@ -44,7 +45,8 @@ class Authorization(db.Model):
 
 class AuthorizationSchema(ma.Schema):
     class Meta:
-        model = Authorization
+        fields = Authorization
+
 
 class Personal(db.Model):
     SID = db.Column(db.Integer, primary_key=True)

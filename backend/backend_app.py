@@ -3,7 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from database.extensions import initialize_db, db as root_db
+from database.extensions import initialize_db
 import os
 from resources.super_routes import superblue
 from resources.signup_routes import signblue
