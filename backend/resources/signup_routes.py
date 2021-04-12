@@ -3,7 +3,9 @@
 from flask import Blueprint, Response, request, jsonify
 from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Authorization, Personal
 from database.extensions import db, ma
+from datetime import datetime
 import bcrypt
+import json
 
 signblue = Blueprint("signblue", __name__)
 
@@ -30,14 +32,36 @@ def check_SID(SID):
 
 # branch dict
 branch_dict = {1:'Aerospace Engineering', 2:'Civil Engineering', 3:'Computer Science Engineering', 4:'Electrical Engineering', 
-5:'Electronics & Communication Engineering',  7: 'Mechanical Engineering', 
-8: 'Materials & Metallurgical Engineering', 9:'Production & Industrial Engineering',}
+5:'Electronics & Communication Engineering', 7: 'Mechanical Engineering', 
+8: 'Materials & Metallurgical Engineering', 9:'Production & Industrial Engineering'}
 
 # get branch
 def getBranch(SID):
-    branch_code = str(SID)[5]
+    branch_code = str(SID)[4]
     branch_name = branch_dict[int(branch_code)]
     return branch_name
+
+# get year
+def getYear(SID):
+    presentTime = datetime.now()
+    # current year --> yy format
+    thisyear = presentTime.year%100 
+    # current month 
+    thismonth = presentTime.month
+    # the admission year of the student 
+    admyear = int(str(SID)[0:2])
+
+    # year in degree 
+    currentyear = thisyear-admyear if thismonth<5 else thisyear-admyear+1
+
+    return currentyear
+
+# get semester
+def getSemester(currentyear):
+    presentTime = datetime.now()
+    thismonth = presentTime.month
+    sem = currentyear*2 if thismonth<5 else currentyear*2-1
+    return sem
 
 # adding signup info to the table
 @signblue.route('/signup', methods=['POST'])
@@ -65,16 +89,14 @@ def sign_up():
     Branch = getBranch(SID)
 
     # get year
-    Year = 0
+    Year = getYear(SID)
 
     # get semester
-    Semester = 0
+    Semester = getSemester(Year)
 
     # add to personal 
-    new_personal = Personal(SID, Name, Branch, Year, Semester)
-
-    # db.session(new_personal)
-    # db.session.commit()
+    db.session.add(Personal(SID, Name, Branch, Year, Semester))
+    db.session.commit()
 
     auth_info = Authorization.query.get(SID)
     if not auth_info:

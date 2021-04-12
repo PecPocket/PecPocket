@@ -45,8 +45,7 @@ class Authorization(db.Model):
 
 class AuthorizationSchema(ma.Schema):
     class Meta:
-        fields = Authorization
-
+        fields = ("SID", "Auth")
 
 class Personal(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
