@@ -6,7 +6,7 @@ from database.extensions import db, ma
 
 clubblue = Blueprint("clubblue", __name__)
 
-#Create a Subject Row
+#Create a Club Row
 @clubblue.route('/club', methods=['POST'])
 def add_club():
     SID = request.json['SID']
@@ -45,3 +45,4 @@ def delete_club(SID):
     db.session.delete(club_detail)
     db.session.commit()
     return jsonify({'code':200})
+

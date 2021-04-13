@@ -7,21 +7,21 @@ from database.extensions import db, ma
 sub_convblue = Blueprint("sub_convblue", __name__)
 
 # GET All SubConvertor
-@sub_convblue.route('/subConvertor', methods=['GET'])
+@sub_convblue.route('/subconvertor', methods=['GET'])
 def get_sub_convs():
     all_sub_conv = SubConvertor.query.all()
     result = sub_convertors_schema.dump(all_sub_conv)
     return jsonify(result)
 
 # GET Single SubConvertor
-@sub_convblue.route('/subConvertor/<Sub_code>', methods=['GET'])
+@sub_convblue.route('/subconvertor/<Sub_code>', methods=['GET'])
 def get_sub_conv(Sub_code):
     sub_conv_detail = SubConvertor.query.get(Sub_code)
     result = sub_convertor_schema.dump(sub_conv_detail)
     return jsonify(result)
 
 #Create a SubConvertor Row
-@sub_convblue.route('/subConvertor', methods=['POST'])
+@sub_convblue.route('/subconvertor', methods=['POST'])
 def add_sub_conv():
     Sub_code = request.json['Sub_code']
     Subject = request.json['Subject']
@@ -36,7 +36,7 @@ def add_sub_conv():
 
 
 # Update a SubConvertor Row
-@sub_convblue.route('/subConvertor/<Sub_code>', methods=['PUT'])
+@sub_convblue.route('/subconvertor/<Sub_code>', methods=['PUT'])
 def update_sub_conv(Sub_code):
     sub_conv_detail = SubConvertor.query.get(Sub_code)
 

@@ -7,21 +7,21 @@ from database.extensions import db, ma
 club_convblue = Blueprint("club_convblue", __name__)
 
 # GET All ClubConvertor
-@club_convblue.route('/clubConvertor', methods=['GET'])
+@club_convblue.route('/clubconvertor', methods=['GET'])
 def get_club_convs():
     all_club_conv = ClubConvertor.query.all()
     result = club_convertors_schema.dump(all_club_conv)
     return jsonify(result)
 
 # GET Single ClubConvertor
-@club_convblue.route('/clubConvertor/<Club_code>', methods=['GET'])
+@club_convblue.route('/clubconvertor/<Club_code>', methods=['GET'])
 def get_club_conv(Club_code):
     club_conv_detail = ClubConvertor.query.get(Club_code)
     result = club_convertor_schema.dump(club_conv_detail)
     return jsonify(result)
 
 #Create a ClubConvertor Row
-@club_convblue.route('/clubConvertor', methods=['POST'])
+@club_convblue.route('/clubconvertor', methods=['POST'])
 def add_club_conv():
     Club_code = request.json['Club_code']
     Club = request.json['Club']
@@ -36,7 +36,7 @@ def add_club_conv():
 
 
 # Update a ClubConvertor Row
-@club_convblue.route('/clubConvertor/<Club_code>', methods=['PUT'])
+@club_convblue.route('/clubconvertor/<Club_code>', methods=['PUT'])
 def update_club_conv(Club_code):
     club_conv_detail = ClubConvertor.query.get(Club_code)
 
@@ -53,7 +53,7 @@ def update_club_conv(Club_code):
 
 
 # Delete ClubConvertor
-@club_convblue.route('/clubConvertor/<Club_code>', methods=['DELETE'])
+@club_convblue.route('/clubconvertor/<Club_code>', methods=['DELETE'])
 def delete_club_conv(Club_code):
     club_conv_detail = ClubConvertor.query.get(Club_code)
     db.session.delete(club_conv_detail)
