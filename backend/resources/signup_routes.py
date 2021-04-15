@@ -1,8 +1,8 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Authorization, Personal
-from database.extensions import db, ma
+from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Authorization, Personal, db, ma
+# from database.extensions import db, ma
 from datetime import datetime
 import bcrypt
 import json
@@ -172,19 +172,19 @@ def login():
             # correct sid, wrong Password
             return jsonify({'code':404})
 
-# delete from signup 
-@signblue.route('/signup/<SID>', methods=['DELETE'])
-def delete_signup(SID):
-    signup_info = SignUp.query.get(SID)
+# # delete from signup 
+# @signblue.route('/signup/<SID>', methods=['DELETE'])
+# def delete_signup(SID):
+#     signup_info = SignUp.query.get(SID)
 
-    # check if the user exists in sign up 
-    if not signup_info:
-        # has not signed up yet
-        return jsonify({'code':403})
+#     # check if the user exists in sign up 
+#     if not signup_info:
+#         # has not signed up yet
+#         return jsonify({'code':403})
 
-    # ask for Password for extra confirmation --> maybe
+#     # ask for Password for extra confirmation --> maybe
 
-    db.session.delete(signup_info)
-    db.session.commit()
+#     db.session.delete(signup_info)
+#     db.session.commit()
 
-    return jsonify({'code':200})
+#     return jsonify({'code':200})

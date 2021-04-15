@@ -1,8 +1,8 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Personal, PersonalSchema, personal_schema, personals_schema
-from database.extensions import db, ma
+from database.models import Personal, PersonalSchema, personal_schema, personals_schema, db, ma
+# from database.extensions import db, ma
 
 personalblue = Blueprint("personal", __name__)
 

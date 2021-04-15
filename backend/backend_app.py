@@ -3,7 +3,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from database.extensions import initialize_db
+from database.models import SubConvertor, initialize_db
+# from database.models import initialize_db
 import flask_whooshalchemy as wa
 import os
 from resources.super_routes import superblue
@@ -18,7 +19,7 @@ from resources.personal_routes import personalblue
 from resources.delete_account import deleteblue
 from resources.signup_clubs import signupclubsblue
 from resources.same_class import sameyearblue
-from database.models import SubConvertor
+
 
 app = Flask(__name__)
 
@@ -27,7 +28,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database/db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-# app.config['WHOOSH_BASE'] = 'whoosh'
+app.config['WHOOSH_BASE'] = 'whoosh'
 
 initialize_db(app)
 

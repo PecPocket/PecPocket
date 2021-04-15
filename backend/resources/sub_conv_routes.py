@@ -2,8 +2,8 @@
 
 from flask import Blueprint, Response, request, jsonify
 import flask_whooshalchemy as wa
-from database.models import SubConvertor, SubConvertorSchema, sub_convertor_schema, sub_convertors_schema
-from database.extensions import db, ma
+from database.models import SubConvertor, SubConvertorSchema, sub_convertor_schema, sub_convertors_schema, db, ma
+# from database.models import db, ma
 # trying out whooshalchemy
 
 

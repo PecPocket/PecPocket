@@ -1,12 +1,13 @@
 #pylint: disable-all
 
-from .extensions import db, ma
+# from .extensions import db, ma
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import flask_whooshalchemy
 
-
+db = SQLAlchemy()
+ma = Marshmallow()
 
 # Super Table
 class Super(db.Model):
@@ -171,5 +172,13 @@ clubs_schema = ClubSchema(many=True)
 
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
+
+def initialize_db(app):
+    db.init_app(app)
+    ma.init_app(app)
+    with app.app_context():
+        # db.drop('auth')
+        db.create_all()
+        
 
 

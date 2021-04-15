@@ -1,8 +1,8 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import super_schema, supers_schema, Super, SuperSchema
-from database.extensions import db, ma
+from database.models import super_schema, supers_schema, Super, SuperSchema, db, ma
+# from database.models import db, ma
 
 superblue = Blueprint("superblue", __name__)
 
