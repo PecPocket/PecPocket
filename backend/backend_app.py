@@ -4,6 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from database.extensions import initialize_db
+# import flask_whooshalchemy 
 import os
 from resources.super_routes import superblue
 from resources.signup_routes import signblue
@@ -17,6 +18,7 @@ from resources.personal_routes import personalblue
 from resources.delete_account import deleteblue
 from resources.signup_clubs import signupclubsblue
 from resources.same_class import sameyearblue
+from database.models import SubConvertor
 
 app = Flask(__name__)
 
@@ -24,9 +26,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database/db.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+# app.config['WHOOSH_BASE'] = 'whoosh'
 
 initialize_db(app)
+
+# flask_whooshalchemy.whoosh_index(app, SubConvertor)
+
 
 app.register_blueprint(superblue)
 app.register_blueprint(signblue)
@@ -42,3 +48,4 @@ app.register_blueprint(signupclubsblue)
 app.register_blueprint(sameyearblue)
 
 app.run(debug=True)
+

@@ -1,8 +1,11 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
+# import flask_whooshalchemy as wa
 from database.models import SubConvertor, SubConvertorSchema, sub_convertor_schema, sub_convertors_schema
 from database.extensions import db, ma
+# trying out whooshalchemy
+
 
 sub_convblue = Blueprint("sub_convblue", __name__)
 
@@ -53,9 +56,29 @@ def update_sub_conv(Sub_code):
 
 
 # Delete SubConvertor
-@sub_convblue.route('/subConvertor/<Sub_code>', methods=['DELETE'])
+@sub_convblue.route('/subconvertor/<Sub_code>', methods=['DELETE'])
 def delete_sub_conv(Sub_code):
     sub_conv_detail = SubConvertor.query.get(Sub_code)
     db.session.delete(sub_conv_detail)
     db.session.commit()
     return jsonify({'code':200})
+
+
+
+
+
+# @sub_convblue.route('/subconvertor/search/<Sub_code>', methods=['GET'])
+# def search_sub(Sub_code):
+
+#     word = Sub_code
+
+#     searched = SubConvertor.query.whoosh_search(word).all()
+
+#     sub_list = []
+
+#     for line in searched:
+#         sub_list.append(line.Subject)
+    
+#     return jsonify({'subjects': sub_list})
+
+

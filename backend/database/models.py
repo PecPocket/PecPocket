@@ -5,6 +5,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
+
+
 # Super Table
 class Super(db.Model):
     SID = db.Column(db.Integer, primary_key = True)
@@ -101,6 +103,7 @@ class BackElectSubSchema(ma.Schema):
 
 # Sub convertor
 class SubConvertor(db.Model):
+    # __searchable__ = ['Sub_code', 'Subject']
     Sub_code = db.Column(db.String(100), primary_key=True, nullable=False)
     Subject = db.Column(db.String(50), nullable=False)
 
@@ -167,3 +170,5 @@ clubs_schema = ClubSchema(many=True)
 
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
+
+
