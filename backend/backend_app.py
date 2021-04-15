@@ -4,7 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from database.extensions import initialize_db
-# import flask_whooshalchemy 
+import flask_whooshalchemy as wa
 import os
 from resources.super_routes import superblue
 from resources.signup_routes import signblue
@@ -31,7 +31,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 initialize_db(app)
 
-# flask_whooshalchemy.whoosh_index(app, SubConvertor)
+wa.whoosh_index(app, SubConvertor)
 
 
 app.register_blueprint(superblue)
