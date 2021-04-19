@@ -5,30 +5,6 @@ from database.models import ClubConvertor, ClubConvertorSchema, club_convertors_
 
 signupclubsblue = Blueprint("signupclubsblue", __name__)
 
-
-# returns all students who are part of a particular club
-@signupclubsblue.route("/club/<Club_code>", methods=['GET'])
-def students_in_club(Club_code):
-    search = "%{}%".format(Club_code)
-    results = Clubs.query.filter(Clubs.Club_codes.like(search)).all()
-
-    students_of_club = []
-    for kids in results:
-        students_of_club.append(kids.SID)
-
-    return jsonify({"Students": peeps})
-
-#returns list of clubs which match the string searched for.
-@signupclubsblue.route("/clubs/search", methods=["GET"])
-def search_club():
-
-    word = str(request.args['query'])
-    search = "%{}%".format(word)
-    club_list = ClubConvertor.query.filter(ClubConvertor.Club.like(search)).all()
-
-    result = club_convertors_schema.dump(club_list)
-    return jsonify(result)
-
 @signupclubsblue.route('/clubs', methods=["POST"])
 def clubs_add():
     SID = request.json['SID']

@@ -62,16 +62,7 @@ def delete_sub_conv(Sub_code):
     db.session.commit()
     return jsonify({'code':200})
 
-#sending all subjects that have been searched for during sign up using query
-@sub_convblue.route('/subconverter/search', methods=["GET"])
-def search_sub():
 
-    word = str(request.args['query'])
-    search = "%{}%".format(word)
-    subject_list = SubConvertor.query.filter(or_(SubConvertor.Sub_code.like(search),SubConvertor.Subject.like(search) ))
-
-    result = sub_convertors_schema.dump(subject_list)
-    return jsonify(result)
 
 
 

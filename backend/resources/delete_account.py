@@ -33,12 +33,6 @@ def delete_account(SID):
     db.session.delete(personal_delete)
     db.session.commit()
 
-    # #delete from back_elect
-    # back_elect_delete = BackElectSub.query.get(SID)
-    # if back_elect_delete:
-    #     db.session.delete(back_elect_delete)
-    #     db.session.commit()
-
     #deleting from auth (if there)
     auth_delete = Authorization.query.get(SID)
     if auth_delete:
