@@ -140,7 +140,7 @@ class PersonalSchema(ma.Schema):
 class Clubs(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Club_codes = db.Column(db.String(50), nullable=False)
-
+    
     personal_id = db.Column(db.Integer, db.ForeignKey('personal.SID'))
 
     def __init__(self, SID, Club_codes, personal_id):
@@ -192,7 +192,7 @@ sub_convertor_schema = SubConvertorSchema()
 sub_convertors_schema = SubConvertorSchema(many=True)
 
 club_schema = ClubSchema()
-# clubs_schema = ClubSchema(many=True)
+clubs_schema = ClubSchema(many=True)
 
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
