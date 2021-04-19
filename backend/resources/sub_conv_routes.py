@@ -1,10 +1,9 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-import flask_whooshalchemy as wa
 from database.models import SubConvertor, SubConvertorSchema, sub_convertor_schema, sub_convertors_schema, db, ma
-# from database.models import db, ma
-# trying out whooshalchemy
+
+from sqlalchemy import or_
 
 
 sub_convblue = Blueprint("sub_convblue", __name__)
@@ -63,26 +62,25 @@ def delete_sub_conv(Sub_code):
     db.session.commit()
     return jsonify({'code':200})
 
-
-
-
-
-@sub_convblue.route('/subconvertor/search', methods=['GET'])
+#sending all subjects that have been searched for during sign up using query
+@sub_convblue.route('/subconverter/search', methods=["GET"])
 def search_sub():
 
-    word = str((request.args['query']))
-    searched = SubConvertor.query.whoosh_search(word).all()
+    word = str(request.args['query'])
+    search = "%{}%".format(word)
+    subject_list = SubConvertor.query.filter(or_(SubConvertor.Sub_code.like(search),SubConvertor.Subject.like(search) ))
 
-    sub_list = []
+    result = sub_convertors_schema.dump(subject_list)
+    return jsonify(result)
 
-    for line in searched:
-        sub_list.append(line.Sub_code)
-    
-    return jsonify({'subjects': sub_list})
 
-    # result = sub_convertor_schema.dump(searched)
-    # return jsonify(result)
-    # return jsonify({"query": word})
+
+
+
+
+
+
+
 
 
 

@@ -3,9 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from database.models import SubConvertor, initialize_db
-# from database.models import initialize_db
-import flask_whooshalchemy as wa
+from database.models import initialize_db
 import os
 from resources.super_routes import superblue
 from resources.signup_routes import signblue
@@ -28,11 +26,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database/db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['WHOOSH_BASE'] = 'whoosh'
 
 initialize_db(app)
-
-wa.whoosh_index(app, SubConvertor)
 
 
 app.register_blueprint(superblue)

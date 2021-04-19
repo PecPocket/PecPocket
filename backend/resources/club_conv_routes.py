@@ -2,7 +2,6 @@
 
 from flask import Blueprint, Response, request, jsonify
 from database.models import ClubConvertor, ClubConvertorSchema, club_convertor_schema, club_convertors_schema, db, ma
-# from database.extensions import db, ma
 
 club_convblue = Blueprint("club_convblue", __name__)
 
@@ -59,3 +58,5 @@ def delete_club_conv(Club_code):
     db.session.delete(club_conv_detail)
     db.session.commit()
     return jsonify({'code':200})
+
+
