@@ -29,6 +29,11 @@ def update_club(SID):
     SID = request.json['SID']
     Club_codes = request.json['Club_codes']
 
+    if Club_codes is None :
+        db.session.delete(club_detail)
+        db.session.commit()
+        return jsonify({'code':200})
+
     club_detail.SID = SID
     club_detail.Club_codes = Club_codes
 
@@ -37,12 +42,4 @@ def update_club(SID):
     # returns the created json 
     return jsonify({'code':200})
 
-
-# Delete Club
-@clubblue.route('/club/<SID>', methods=['DELETE'])
-def delete_club(SID):
-    club_detail = Clubs.query.get(SID)
-    db.session.delete(club_detail)
-    db.session.commit()
-    return jsonify({'code':200})
 
