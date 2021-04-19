@@ -1,15 +1,16 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Personal, PersonalSchema, Clubs, ClubSchema,  db, ma
+from database.models import Personal, PersonalSchema, Clubs, ClubSchema,  db, ma, personal_schema
 
 pecsocialblue = Blueprint("pecsocialblue", __name__)
 
-@pecsocialblue.route("/social/<SID>", methods=["GET"])
+@pecsocialblue.route("/social", methods=["GET"])
 def get_social():
 
-    person = db.session.query(Personal, Clubs).outerjoin(Personal, Customer.SID == Personal.SID)
-    result = jsonify(person)
+    person = db.session.query(Personal, Clubs).outerjoin(Personal, Clubs.SID == Personal.SID)
+    result = personal_schema.dump(person)
+    return jsonify(result)
 
 
 # #Get Single personal
