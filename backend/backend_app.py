@@ -3,7 +3,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from database.models import initialize_db
+from database.models import db_initialiser
 import os
 from resources.super_routes import superblue
 from resources.signup_routes import signblue
@@ -28,7 +28,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database/db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-initialize_db(app)
+
+db_initialiser(app)
 
 
 app.register_blueprint(superblue)
