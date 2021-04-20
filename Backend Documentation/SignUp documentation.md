@@ -121,7 +121,7 @@
 ## 5. Search query for subjects
 
     desc - to implement a search bar for subjects
-    href - ../subject/search/query? -- [GET]
+    href - ../subject/search?query= -- [GET]
     body - null
 
     returns - 
@@ -151,7 +151,7 @@
 ## 6. Search query for clubs
 
     desc - to implement a search bar for clubs/socities
-    href - ../club/search/query? -- [GET]
+    href - ../club/search?query= -- [GET]
     body - null
 
     returns - 
