@@ -4,10 +4,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-# import flask_whooshalchemy
 
 db = SQLAlchemy()
 ma = Marshmallow()
+
+
 
 # Super Table
 class Super(db.Model):
@@ -51,6 +52,22 @@ class AuthorizationSchema(ma.Schema):
     class Meta:
         fields = ("SID", "Auth")
 
+
+# Sub convertor
+class SubConvertor(db.Model):
+    # __searchable__ = ['Sub_code', 'Subject']
+    Sub_code = db.Column(db.String(100), primary_key=True, nullable=False)
+    Subject = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, Sub_code, Subject):
+        self.Sub_code = Sub_code
+        self.Subject = Subject
+
+class SubConvertorSchema(ma.Schema):
+    class Meta:
+        fields = ("Sub_code", "Subject")
+
+
 class Personal(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(100), nullable=False)
@@ -69,53 +86,6 @@ class PersonalSchema(ma.Schema):
     class Meta:
         fields = ("SID", "Name", "Branch", "Year", "Semester")
 
-
-
-# Subject Table
-class Subject(db.Model):
-    Branch = db.Column(db.String(25), primary_key = True)
-    Semester = db.Column(db.Integer, primary_key = True)
-    Sub_codes = db.Column(db.String(100), nullable = False)
-    Elect_codes = db.Column(db.String(100))
-
-    def __init__(self, Branch, Semester, Sub_codes, Elect_codes):
-        self.Branch = Branch
-        self.Semester = Semester
-        self.Sub_codes = Sub_codes
-        self.Elect_codes = Elect_codes
-    
-class SubjectSchema(ma.Schema):
-    class Meta:
-        fields = ("Branch", "Semester", "Sub_codes", "Elect_codes")
-
-
-# Back_elect_sub Table
-class BackElectSub(db.Model):
-    SID = db.Column(db.Integer, primary_key=True)
-    Sub_codes = db.Column(db.String(100), nullable=False)
-
-    def __init__(self, SID, Sub_codes):
-        self.SID = SID
-        self.Sub_codes = Sub_codes
-
-class BackElectSubSchema(ma.Schema):
-    class Meta:
-        fields = ("SID", "Sub_codes")
-
-
-# Sub convertor
-class SubConvertor(db.Model):
-    # __searchable__ = ['Sub_code', 'Subject']
-    Sub_code = db.Column(db.String(100), primary_key=True, nullable=False)
-    Subject = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, Sub_code, Subject):
-        self.Sub_code = Sub_code
-        self.Subject = Subject
-
-class SubConvertorSchema(ma.Schema):
-    class Meta:
-        fields = ("Sub_code", "Subject")
 
 
 # Clubs Table
@@ -146,6 +116,7 @@ class ClubConvertorSchema(ma.Schema):
         fields = ("Club_code", "Club")
 
 
+
 # Init Schema
 super_schema = SuperSchema()
 supers_schema = SuperSchema(many=True)
@@ -158,11 +129,11 @@ authorization_schema = AuthorizationSchema()
 personal_schema = PersonalSchema()
 personals_schema = PersonalSchema(many=True)
 
-subject_schema = SubjectSchema()
-subjects_schema = SubjectSchema(many=True)
+# subject_schema = SubjectSchema()
+# subjects_schema = SubjectSchema(many=True)
 
-back_elect_sub_schema = BackElectSubSchema()
-back_elect_subs_schema = BackElectSubSchema(many=True)
+# back_elect_sub_schema = BackElectSubSchema()
+# back_elect_subs_schema = BackElectSubSchema(many=True)
         
 sub_convertor_schema = SubConvertorSchema()
 sub_convertors_schema = SubConvertorSchema(many=True)
@@ -173,7 +144,9 @@ clubs_schema = ClubSchema(many=True)
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
 
-def initialize_db(app):
+
+
+def db_initialiser(app):
     db.init_app(app)
     ma.init_app(app)
     with app.app_context():
@@ -181,5 +154,6 @@ def initialize_db(app):
         db.create_all()
 
         
+
 
 
