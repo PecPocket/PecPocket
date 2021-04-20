@@ -31,7 +31,7 @@
     
 ## 2. To Get list of students in a Club
 
-    href - ../club/<Club_code>  -- [GET]
+    href - ../clubs/<Club_code>  -- [GET]
     body - null
 
     returns - 

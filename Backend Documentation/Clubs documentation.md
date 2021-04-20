@@ -2,7 +2,7 @@
 
 ## 1. To Get the List Of Clubs for an SID
 
-    href - ../signup/<SID>  -- [GET]
+    href - ../club/<SID>  -- [GET]
     body - null
 
     returns -
@@ -39,7 +39,7 @@
 
 ## 2. To Update Clubs for an SID
 
-    href - ../signup/<SID> -- [PUT]
+    href - ../club/<SID> -- [PUT]
     
     body - 
     {
