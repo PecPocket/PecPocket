@@ -2,7 +2,6 @@
 
 from flask import Blueprint, Response, request, jsonify
 from database.models import SignUp, SignUpSchema,  Personal, PersonalSchema,  Authorization, AuthorizationSchema, signup_schema, club_schema, personal_schema, authorization_schema, db, ma
-# from database.extensions import db, ma
 
 deleteblue = Blueprint("deleteblue", __name__)
 

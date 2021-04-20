@@ -2,12 +2,8 @@
 
 from flask import Blueprint, Response, request, jsonify
 from database.models import Personal, PersonalSchema, personal_schema, personals_schema, db, ma
-# from database.extensions import db, ma
 
 personalblue = Blueprint("personal", __name__)
-
-#Create a Personal Row
-
 
 #Update Personal
 @personalblue.route("/personal/<SID>", methods=["PUT"])

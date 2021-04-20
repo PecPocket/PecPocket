@@ -12,6 +12,7 @@ def get_club_convs():
     result = club_convertors_schema.dump(all_club_conv)
     return jsonify(result)
 
+
 # GET Single ClubConvertor
 @club_convblue.route('/clubconvertor/<Club_code>', methods=['GET'])
 def get_club_conv(Club_code):

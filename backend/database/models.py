@@ -128,12 +128,6 @@ authorization_schema = AuthorizationSchema()
 
 personal_schema = PersonalSchema()
 personals_schema = PersonalSchema(many=True)
-
-# subject_schema = SubjectSchema()
-# subjects_schema = SubjectSchema(many=True)
-
-# back_elect_sub_schema = BackElectSubSchema()
-# back_elect_subs_schema = BackElectSubSchema(many=True)
         
 sub_convertor_schema = SubConvertorSchema()
 sub_convertors_schema = SubConvertorSchema(many=True)
@@ -150,8 +144,9 @@ def db_initialiser(app):
     db.init_app(app)
     ma.init_app(app)
     with app.app_context():
+        pass
         #db.drop_all()
-        db.create_all()
+        #db.create_all()
 
         
 

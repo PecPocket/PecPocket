@@ -2,7 +2,6 @@
 
 from flask import Blueprint, Response, request, jsonify
 from database.models import Authorization, AuthorizationSchema, authorization_schema, db, ma
-# from database.extensions import db, ma
 
 authblue = Blueprint("authblue", __name__)
 

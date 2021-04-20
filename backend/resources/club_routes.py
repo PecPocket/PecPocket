@@ -2,11 +2,10 @@
 
 from flask import Blueprint, Response, request, jsonify
 from database.models import Clubs, ClubSchema, club_schema, db, ma
-# from database.extensions import db, ma
 
 clubblue = Blueprint("clubblue", __name__)
 
-#Create a Club Row
+#Create a Club Row (exclusively for us)
 @clubblue.route('/club', methods=['POST'])
 def add_club():
     SID = request.json['SID']
@@ -19,6 +18,24 @@ def add_club():
 
     # returns the created json 
     return club_schema.jsonify(new_club)
+
+
+# creating club row during signup 
+@clubblue.route('/signupclub', methods=["POST"])
+def clubs_add():
+    SID = request.json['SID']
+    club_list = request.json['Clubs']
+
+    club_string = ""
+    for club in club_list:
+        club_string += str(club)
+    
+    new_club = Clubs(SID, club_string)
+
+    db.session.add(new_club)
+    db.session.commit()
+
+    return jsonify({"code" : 200})
 
 
 # Update a Club Row
@@ -42,4 +59,6 @@ def update_club(SID):
     # returns the created json 
     return jsonify({'code':200})
 
+
+# GET a list of clubs for a particular SID
 

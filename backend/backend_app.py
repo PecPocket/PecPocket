@@ -13,7 +13,6 @@ from resources.sub_conv_routes import sub_convblue
 from resources.club_conv_routes import club_convblue
 from resources.personal_routes import personalblue
 from resources.delete_account import deleteblue
-from resources.signup_clubs import signupclubsblue
 from resources.fetch_student_list import stulistblue
 # from resources.study_material_routes import studyblue
 from resources.pec_social_route import pecsocialblue
@@ -40,7 +39,6 @@ app.register_blueprint(sub_convblue)
 app.register_blueprint(club_convblue)
 app.register_blueprint(personalblue)
 app.register_blueprint(deleteblue)
-app.register_blueprint(signupclubsblue)
 app.register_blueprint(stulistblue)
 # app.register_blueprint(studyblue)
 app.register_blueprint(pecsocialblue)
@@ -48,4 +46,3 @@ app.register_blueprint(searchblue)
 
 app.run(debug=True)
 
-# random stupid shit to make sure we have the same code

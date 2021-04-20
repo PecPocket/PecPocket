@@ -2,8 +2,6 @@
 
 from flask import Blueprint, Response, request, jsonify
 from database.models import Personal, db, ma
-# from database.extensions import db, ma
-
 
 stulistblue = Blueprint("stulistblue", __name__)
 

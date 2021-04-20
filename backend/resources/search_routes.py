@@ -21,7 +21,7 @@ def search_sub():
 
 
 #returns list of clubs which match the string searched for.
-@searchblue.route("/clubs/search", methods=["GET"])
+@searchblue.route("/club/search", methods=["GET"])
 def search_club():
     word = str(request.args['query'])
     search = "%{}%".format(word)
