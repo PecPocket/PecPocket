@@ -121,7 +121,7 @@ class Personal(db.Model):
     Branch = db.Column(db.String(25), nullable=False)
     Year = db.Column(db.Integer, nullable=False)
     Semester = db.Column(db.Integer, nullable=False)
-    Club_child = db.relationship("Clubs", backref=db.backref("Club_child", uselist=False))
+    Club_child = db.relationship("Clubs", backref="personal", uselist=False)
 
     def __init__(self, SID, Name, Branch, Year, Semester):
         self.SID = SID
@@ -141,7 +141,7 @@ class Clubs(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Club_codes = db.Column(db.String(50), nullable=False)
     
-    personal_id = db.Column(db.Integer, db.ForeignKey('personal.SID'))
+    personal_id = db.Column(db.Integer, db.ForeignKey('personal.SID'), unique=True)
 
     def __init__(self, SID, Club_codes, personal_id):
         self.SID = SID
@@ -167,7 +167,16 @@ class ClubConvertorSchema(ma.Schema):
         fields = ("Club_code", "Club")
 
 
+class PecSocialSchema(ma.Schema):
+    class Meta:
+        Model = Personal
 
+    SID = ma.auto_field()
+    Name = ma.auto_field()
+    Branch = ma.auto_field()
+    Year = ma.auto_field()
+    Semester = ma.auto_field()
+    Club_codes = ma.auto_field()
 
 
 # Init Schema
@@ -196,6 +205,9 @@ clubs_schema = ClubSchema(many=True)
 
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
+
+pec_social_schema = PecSocialSchema()
+pec_socials_schema = PecSocialSchema(many=True)
 
 
 def db_initialiser(app):
