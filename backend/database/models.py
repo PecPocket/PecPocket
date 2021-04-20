@@ -74,17 +74,19 @@ class Personal(db.Model):
     Branch = db.Column(db.String(25), nullable=False)
     Year = db.Column(db.Integer, nullable=False)
     Semester = db.Column(db.Integer, nullable=False)
+    Insta = db.Column(db.String(50))
 
-    def __init__(self, SID, Name, Branch, Year, Semester):
+    def __init__(self, SID, Name, Branch, Year, Semester, Insta):
         self.SID = SID
         self.Name = Name
         self.Branch = Branch
         self.Year = Year
         self.Semester = Semester
+        self.Insta = Insta
 
 class PersonalSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "Name", "Branch", "Year", "Semester")
+        fields = ("SID", "Name", "Branch", "Year", "Semester", "Insta")
 
 
 
@@ -145,8 +147,8 @@ def db_initialiser(app):
     ma.init_app(app)
     with app.app_context():
         pass
-        #db.drop_all()
-        #db.create_all()
+        # db.drop_all()
+        db.create_all()
 
         
 

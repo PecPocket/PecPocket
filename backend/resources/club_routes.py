@@ -56,6 +56,12 @@ def update_club(SID):
     SID = request.json['SID']
     Club_codes = request.json['Club_codes']
 
+    signup_check = SignUp.query.get(SID)
+
+    if not signup_check:
+        #student not signed up
+        return jsonify({'code': 404})
+
     if not club_detail :
         # student has no current clubs, make a POST request
         return jsonify({'code':501})
@@ -80,6 +86,12 @@ def get_clubs(SID):
     club_detail = Clubs.query.get(SID)
 
     clubs_of_student = club_detail.Club_codes
+
+    signup_check = SignUp.query.get(SID)
+
+    if not signup_check:
+        #student not signed up
+        return jsonify({'code':404})
 
     if not club_detail :
         # student has no club

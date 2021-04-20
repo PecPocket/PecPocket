@@ -19,12 +19,14 @@ def update_personal(SID):
     Branch = request.json['Branch']
     Year = request.json['Year']
     Semester = request.json['Semester']
+    Insta = request.json["Insta"]
 
     personal_info.Name = Name
     personal_info.SID = SID
     personal_info.Branch = Branch
     personal_info.Year = Year
     personal_info.Semester = Semester
+    personal_info.Insta = Insta
 
     db.session.commit()
 
@@ -44,6 +46,26 @@ def get_super(SID):
     single_personal = Personal.query.get(SID)
     result = personal_schema.dump(single_personal)
     return jsonify(result)
+
+# Add instagram handle to personal
+@personalblue.route('/insta/<SID>', methods=["PUT"])
+def add_insta(SID):
+    single_insta = Personal.query.get(SID)
+
+    SID = request.json["SID"]
+    insta = request.json["Insta"]
+
+    if not single_insta:
+        return jsonify({"code": 404})
+
+    single_insta.Insta = insta
+
+    db.session.commit()
+
+    return jsonify({"code": 200})
+
+
+
 
 
 

@@ -94,7 +94,7 @@ def sign_up():
     Semester = getSemester(Year)
 
     # ADD TO PERSONAL TABLE
-    db.session.add(Personal(SID, Name, Branch, Year, Semester))
+    db.session.add(Personal(SID, Name, Branch, Year, Semester, "-"))
     db.session.commit()
 
     auth_info = Authorization.query.get(SID)

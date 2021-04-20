@@ -7,7 +7,7 @@
 
     returns 
     {
-      "code" : x 
+      "code" : x (int)
      }
 
     x -> 401 If SID does not exist
@@ -30,8 +30,8 @@
 
     body - 
     {
-      "SID" : sid,
-      "Password" : "pwd"
+      "SID" : sid,  (int)
+      "Password" : "pwd"  (string)
     }
 
 
@@ -45,7 +45,7 @@
     }
     {
       "code" : 200,
-      "Auth" : x
+      "Auth" : x  (int)
     }
     x depends on the Auth level of the user, provided by the backend database
     Auth 0 -> Student
@@ -75,14 +75,14 @@
     
     body - 
     {
-      "SID" : sid,
-      "Password" : "newPassword"
+      "SID" : sid,  (int)
+      "Password" : "newPassword"  (string)
     }
     
     returns - 
 
     {
-      "code" : x
+      "code" : x  (int)
     }
     x -> 403 if sid does not exist in sign up table
     x -> 301 if new Password same as old Password
@@ -94,8 +94,8 @@
     href - ../login -- [POST]
     body - 
     {
-    "SID" : sid,
-    "Password" : "pwd"
+    "SID" : sid,  (int)
+    "Password" : "pwd"  (string)
     }
     pwd is the Password of the given sid
     
@@ -113,7 +113,7 @@
     iii. 
     {
       "code" : 200,
-      "Auth" : x
+      "Auth" : x  (int)
     }
     x depending on the Auth of the user.
 
@@ -137,7 +137,7 @@
 
     href - ../subject/search/query?computer -- [GET]
 
-    body - 
+    returns - 
     {
         "Subject_code" : "CSN101",
         "Subject" : "Computer Networks"
@@ -165,9 +165,9 @@
 
     eg
 
-    href - ../club/search/query?p -- [GET]
+    href - ../club/search?query= -- [GET]
 
-    body - 
+    returns - 
     {
         "Club_code" : "04",
         "Club" : "Projection and Design Club"
@@ -183,8 +183,8 @@
     href - ../signupclub -- [POST]
     body - 
     {
-        "SID" : "sid",
-        "Club_codes" : ['club', 'codes', 'as', 'a', 'list']
+        "SID" : "sid",  (int)
+        "Clubs" : ['club', 'codes', 'as', 'a', 'list']   (list of strings)
     }
 
     returns - 
@@ -203,9 +203,9 @@
     href - ../signupclub
     body -
     {
-        [
-            '01', '02', 03'
-        ]
+
+        "SID" : 19103096,
+        "Clubs" :["01", "02", "03"]
     }
 
 
