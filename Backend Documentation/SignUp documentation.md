@@ -188,6 +188,12 @@
     }
 
     returns - 
+    i. if the SID hasnt' signed up
+    {
+      "code" : 403
+    }
+
+    ii. if the student has signed up
     {
         "code" : 200
     }

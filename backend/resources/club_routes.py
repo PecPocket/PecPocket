@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Clubs, ClubSchema, club_schema, ClubConvertor, db, ma
+from database.models import Clubs, ClubSchema, club_schema, ClubConvertor, SignUp, db, ma
 
 clubblue = Blueprint("clubblue", __name__)
 
@@ -26,6 +26,12 @@ def clubs_add():
     SID = request.json['SID']
     club_list = request.json['Clubs'] # as a list
 
+    signup_info = SignUp.query.get(SID)
+    if not signup_info :
+        # not signed up
+        return jsonify({'code':403})
+
+        
     if club_list is None :
         # empty list
         return jsonify({'code':200})
