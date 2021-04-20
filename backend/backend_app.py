@@ -48,3 +48,4 @@ app.register_blueprint(searchblue)
 
 app.run(debug=True)
 
+# random stupid shit to make sure we have the same code
