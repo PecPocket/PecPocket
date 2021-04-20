@@ -42,6 +42,10 @@ def add_sub_conv():
 def update_sub_conv(Sub_code):
     sub_conv_detail = SubConvertor.query.get(Sub_code)
 
+    if not sub_conv_detail :
+        # subject doesnt exists 
+        return jsonify({'code': 408})
+
     Sub_code = request.json['Sub_code']
     Subject = request.json['Subject']
 
@@ -58,6 +62,11 @@ def update_sub_conv(Sub_code):
 @sub_convblue.route('/subconvertor/<Sub_code>', methods=['DELETE'])
 def delete_sub_conv(Sub_code):
     sub_conv_detail = SubConvertor.query.get(Sub_code)
+
+    if not sub_conv_detail :
+        # subject doesnt exist
+        return jsonify({'code':408})
+        
     db.session.delete(sub_conv_detail)
     db.session.commit()
     return jsonify({'code':200})

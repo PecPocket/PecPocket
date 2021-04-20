@@ -43,6 +43,10 @@ def update_club_conv(Club_code):
     Club_code = request.json['Club_code']
     Club = request.json['Club']
 
+    if not club_conv_detail :
+        # if the club doesn't exist
+        return jsonify({'code' : 501})
+
     club_conv_detail.Club_code = Club_code
     club_conv_detail.Club = Club
 
@@ -56,8 +60,15 @@ def update_club_conv(Club_code):
 @club_convblue.route('/clubconvertor/<Club_code>', methods=['DELETE'])
 def delete_club_conv(Club_code):
     club_conv_detail = ClubConvertor.query.get(Club_code)
+
+    if not club_conv_detail :
+        # if the club doesn't exist
+        return jsonify({'code':501})
+
     db.session.delete(club_conv_detail)
     db.session.commit()
     return jsonify({'code':200})
 
 
+
+# 502 : club doesn't exist

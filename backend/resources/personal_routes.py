@@ -10,6 +10,10 @@ personalblue = Blueprint("personal", __name__)
 def update_personal(SID):
     personal_info = Personal.query.get(SID)
 
+    if not personal_info :
+        # not signed up
+        return jsonify({'code': 403})
+
     SID = request.json['SID']
     Name = request.json['Name']
     Branch = request.json['Branch']
