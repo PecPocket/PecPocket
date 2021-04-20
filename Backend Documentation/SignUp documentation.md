@@ -1,4 +1,4 @@
-# Documentation for Back End Api
+# Documentation for SignUp Back End Api
 
 ## 1. To Check if an SID is valid for Sign Up
 
@@ -69,33 +69,7 @@
     }
 
   
-## 3. To Get All Sign Up
-
-    href - ../signup -- [GET]
-    body - null
-
-    returns - JSON key value pairs of all students in sign up table
-
-    eg 
-
-    href - ../signup  -- [GET]
-
-    body - 
-    {
-      "SID" : 19103001,
-      "Password" : "dfasjdfasdfvasdfviuasbdfgfvb2343892"
-    }
-    {
-      "SID" : 19103096,
-      "Password" : "fajsdfasidfuafwoberfvijbasdfv"
-    }
-    {
-      "SID" : 19103099,
-      "Password" : "sadfawsfiuwebrgiuyedbsdfgasfaergar"
-    }
-
-
-## 4. To Change/Update Password
+  ## 3. To Change/Update Password
 
     href - ../signup/<SID> -- [PUT]
     
@@ -115,7 +89,7 @@
     x -> 200 if updation of Password is successful
     
     
-## 5. To Login 
+## 4. To Login 
   
     href - ../login -- [POST]
     body - 
@@ -142,79 +116,108 @@
       "Auth" : x
     }
     x depending on the Auth of the user.
-    
-## 6. To Delete From Sign Up
- 
-    href - ../signup/<SID> -- [DELETE]
+
+
+## 5. Search query for subjects
+
+    desc - to implement a search bar for subjects
+    href - ../subject/search/query? -- [GET]
     body - null
-    
+
     returns - 
+    i. if no such subject exists
     {
-      "code" : x
+        "code" : 408
     }
-    x -> 200 for successful deletion
-    x -> 403 if sign up does not exist
-      
- ## 7. To Add In Auth
- 
-    href - ../Auth -- [POST]
+
+    ii. if the searched subjects exist
+    JSON key value pairs of all those subjects from Sub Convertor Table
+
+    eg
+
+    href - ../subject/search/query?computer -- [GET]
+
     body - 
     {
-      "SID" : sid, 
-      "Auth" : x
-    }
-    x can be 1 or 2
-    for x = 0, entry is not added in the Auth Table
-    
-    returns - 
+        "Subject_code" : "CSN101",
+        "Subject" : "Computer Networks"
+    },
     {
-        "code" : x
+        "Subject_code" : "CSN104",
+        "Subject" : "Computer Programming"
     }
-    x -> 200 if addition of Auth is successful
-    x -> 405 if Auth of respective SID already exists
-    
-    
- ## 8. To Update Auth 
-    
-    href - ../Auth/<SID> -- [PUT]
+
+
+## 6. Search query for clubs
+
+    desc - to implement a search bar for clubs/socities
+    href - ../club/search/query? -- [GET]
+    body - null
+
+    returns - 
+    i. if no such club exists
+    {
+        "code" : 409
+    }
+
+    ii. if the searched clubs exist
+    JSON key value pairs of all those club from Club Convertor Table
+
+    eg
+
+    href - ../club/search/query?p -- [GET]
+
     body - 
     {
-      "SID" : sid, 
-      "Auth" : newAuth
+        "Club_code" : "04",
+        "Club" : "Projection and Design Club"
+    },
+    {
+        "Club_code" : "08",
+        "Club" : "Punjab Editorial Board"
     }
-    newAuth can be 1 or 2
-    for newAuth = 0, entry is not added in the Auth Table
-    
+
+## 7. Add clubs to the Clubs Table during signup
+
+    desc - converts the clubs list to a string to add to the Clubs Table
+    href - ../signupclub -- [POST]
+    body - 
+    {
+        "SID" : "sid",
+        "Club_codes" : ['club', 'codes', 'as', 'a', 'list']
+    }
+
     returns - 
     {
-        "code" : x
+        "code" : 200
     }
-    x -> 406 if Auth of given SID does not exist
-    x -> 200 if Auth successfully updated
-    
- ## 9. To Delete Auth
-      
-    href - ../Auth/<SID> -- [DELETE]
+
+    eg 
+
+    href - ../signupclub
+    body -
+    {
+        [
+            '01', '02', 03'
+        ]
+    }
+
+
+## 8. Delete Account 
+
+    desc - deletes account from tables -- SignUp, Authorization(if there), Clubs, Personal
+    href - ../delete/<SID> -- [DELETE]
     body - null
-    
+
     returns - 
+    i. if user not in signup
     {
-        "code" : x
+        "code" : 403
     }
-    x -> 406 if Auth of given SID does not exist
-    x -> 200 if Auth successfully deleted
- 
-    
-  
-    
-     
-    
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+    ii. if user in sign up
+    {
+        "code" : 200
+    }
+
+
