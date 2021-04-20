@@ -74,34 +74,21 @@ class Personal(db.Model):
     Branch = db.Column(db.String(25), nullable=False)
     Year = db.Column(db.Integer, nullable=False)
     Semester = db.Column(db.Integer, nullable=False)
+    Club_codes = db.Column(db.String(50))
     Insta = db.Column(db.String(50))
 
-    def __init__(self, SID, Name, Branch, Year, Semester, Insta):
+    def __init__(self, SID, Name, Branch, Year, Semester, Club_codes, Insta):
         self.SID = SID
         self.Name = Name
         self.Branch = Branch
         self.Year = Year
         self.Semester = Semester
+        self.Club_codes = Club_codes
         self.Insta = Insta
 
 class PersonalSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "Name", "Branch", "Year", "Semester", "Insta")
-
-
-
-# Clubs Table
-class Clubs(db.Model):
-    SID = db.Column(db.Integer, primary_key=True)
-    Club_codes = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, SID, Club_codes):
-        self.SID = SID
-        self.Club_codes = Club_codes
-
-class ClubSchema(ma.Schema):
-    class Meta:
-        fields = ("SID", "Club_codes")
+        fields = ("SID", "Name", "Branch", "Year", "Semester", "Club_codes", "Insta")
 
 
 # Club convertor
@@ -134,9 +121,6 @@ personals_schema = PersonalSchema(many=True)
 sub_convertor_schema = SubConvertorSchema()
 sub_convertors_schema = SubConvertorSchema(many=True)
 
-club_schema = ClubSchema()
-clubs_schema = ClubSchema(many=True)
-
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
 
@@ -147,7 +131,7 @@ def db_initialiser(app):
     ma.init_app(app)
     with app.app_context():
         pass
-        # db.drop_all()
+        #db.drop_all()
         db.create_all()
 
         

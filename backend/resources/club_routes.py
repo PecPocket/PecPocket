@@ -1,60 +1,73 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Clubs, ClubSchema, club_schema, ClubConvertor, SignUp, db, ma
+from database.models import Personal, personal_schema, personals_schema, ClubConvertor, SignUp, db, ma
 
 clubblue = Blueprint("clubblue", __name__)
 
-#Create a Club Row (exclusively for us)
+#Create a Club Row 
 @clubblue.route('/club', methods=['POST'])
 def add_club():
     SID = request.json['SID']
-    Club_codes = request.json['Club_codes']
+    Club_list = request.json['Club_codes']  # club codes as a list
 
-    new_club = Clubs(SID, Club_codes)
+    personal_info = Personal.query.get(SID)
 
-    db.session.add(new_club)
-    db.session.commit()
-
-    # returns the created json 
-    return club_schema.jsonify(new_club)
-
-
-# creating club row during signup 
-@clubblue.route('/signupclub', methods=["POST"])
-def clubs_add():
-    SID = request.json['SID']
-    club_list = request.json['Clubs'] # as a list
-
-    signup_info = SignUp.query.get(SID)
-    if not signup_info :
-        # not signed up
+    if not personal_info :
+        # sid not in personal --> not signed up
         return jsonify({'code':403})
 
-        
-    if club_list is None :
+    if Club_list is None :
         # empty list
         return jsonify({'code':200})
 
     club_string = ""
-    for club in club_list:
+    for club in Club_list:
         club_string += str(club)
-    
-    new_club = Clubs(SID, club_string)
 
-    db.session.add(new_club)
+    personal_info.Club_codes = club_string
     db.session.commit()
 
-    return jsonify({"code" : 200})
+    # returns the created json 
+    return personal_schema.jsonify(personal_info)
+
+# after we get clubs list --> then make personal or not 
+
+# # creating club row during signup 
+# @clubblue.route('/signupclub', methods=["POST"])
+# def clubs_add():
+#     SID = request.json['SID']
+#     club_list = request.json['Clubs'] # as a list
+
+#     signup_info = SignUp.query.get(SID)
+#     if not signup_info :
+#         # not signed up
+#         return jsonify({'code':403})
+
+        
+#     if club_list is None :
+#         # empty list
+#         return jsonify({'code':200})
+
+#     club_string = ""
+#     for club in club_list:
+#         club_string += str(club)
+    
+#     new_club = Clubs(SID, club_string)
+
+#     db.session.add(new_club)
+#     db.session.commit()
+
+#     return jsonify({"code" : 200})
 
 
 # Update a Club Row
 @clubblue.route('/club/<SID>', methods=['PUT'])
 def update_club(SID):
-    club_detail = Clubs.query.get(SID)
+    personal_info = Personal.query.get(SID)
 
     SID = request.json['SID']
-    Club_codes = request.json['Club_codes'] # as a list
+    Club_list = request.json['Club_codes'] # as a list
 
     signup_check = SignUp.query.get(SID)
 
@@ -62,21 +75,22 @@ def update_club(SID):
         #student not signed up
         return jsonify({'code': 404})
 
-    if not club_detail :
+    if not personal_info.Club_codes :
         # student has no current clubs, make a POST request
         return jsonify({'code':501})
 
-    if len(Club_codes) == 0 :
-        db.session.delete(club_detail)
+    if Club_list is None :
+        personal_info.Club_codes = ""
+
         db.session.commit()
         return jsonify({'code':200})
 
     club_string = ""
-    for club in Club_codes:
+    for club in Club_list:
         club_string += str(club)
 
-    club_detail.SID = SID
-    club_detail.Club_codes = club_string
+    
+    personal_info.Club_codes = club_string
 
     db.session.commit()
 
@@ -87,9 +101,9 @@ def update_club(SID):
 # GET a list of clubs for a particular SID
 @clubblue.route('/club/<SID>', methods =['GET'])
 def get_clubs(SID):
-    club_detail = Clubs.query.get(SID)
+    personal_info = Personal.query.get(SID)
 
-    clubs_of_student = club_detail.Club_codes
+    clubs_of_student = personal_info.Club_codes
 
     signup_check = SignUp.query.get(SID)
 
@@ -97,7 +111,7 @@ def get_clubs(SID):
         #student not signed up
         return jsonify({'code':404})
 
-    if not club_detail :
+    if len(personal_info.Club_codes) == 0 :
         # student has no club
         return jsonify({'code': 407})
 

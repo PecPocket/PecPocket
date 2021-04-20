@@ -15,7 +15,7 @@ from resources.personal_routes import personalblue
 from resources.delete_account import deleteblue
 from resources.fetch_student_list import stulistblue
 # from resources.study_material_routes import studyblue
-from resources.pec_social_route import pecsocialblue
+#from resources.pec_social_route import pecsocialblue
 from resources.search_routes import searchblue
 
 
@@ -41,7 +41,7 @@ app.register_blueprint(personalblue)
 app.register_blueprint(deleteblue)
 app.register_blueprint(stulistblue)
 # app.register_blueprint(studyblue)
-app.register_blueprint(pecsocialblue)
+#app.register_blueprint(pecsocialblue)
 app.register_blueprint(searchblue)
 
 app.run(debug=True)

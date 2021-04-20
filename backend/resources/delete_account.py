@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import SignUp, SignUpSchema,  Personal, PersonalSchema,  Authorization, AuthorizationSchema, signup_schema, club_schema, personal_schema, authorization_schema, db, ma
+from database.models import SignUp, SignUpSchema,  Personal, PersonalSchema,  Authorization, AuthorizationSchema, signup_schema, personal_schema, authorization_schema, db, ma
 
 deleteblue = Blueprint("deleteblue", __name__)
 
@@ -20,12 +20,6 @@ def delete_account(SID):
     #deleting from SignUp
     db.session.delete(signup_delete)
     db.session.commit()
-
-    #delete from clubs
-    club_delete = Clubs.query.get(SID)
-    if club_delete:
-        db.session.delete(club_delete)
-        db.session.commit()
 
     #delete from personal
     personal_delete = Personal.query.get(SID)

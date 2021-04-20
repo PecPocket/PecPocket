@@ -19,6 +19,7 @@ def update_personal(SID):
     Branch = request.json['Branch']
     Year = request.json['Year']
     Semester = request.json['Semester']
+    Club_codes = request.json['Club_codes']
     Insta = request.json["Insta"]
 
     personal_info.Name = Name
@@ -26,6 +27,7 @@ def update_personal(SID):
     personal_info.Branch = Branch
     personal_info.Year = Year
     personal_info.Semester = Semester
+    personal_info.Club_codes = Club_codes
     personal_info.Insta = Insta
 
     db.session.commit()
