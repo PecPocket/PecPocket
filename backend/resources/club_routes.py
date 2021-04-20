@@ -29,7 +29,7 @@ def update_club(SID):
     SID = request.json['SID']
     Club_codes = request.json['Club_codes']
 
-    if Club_codes is None :
+    if len(Club_codes) == 0 :
         db.session.delete(club_detail)
         db.session.commit()
         return jsonify({'code':200})
