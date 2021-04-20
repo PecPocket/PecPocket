@@ -11,13 +11,13 @@ deleteblue = Blueprint("deleteblue", __name__)
 @deleteblue.route("/delete/<SID>", methods=['DELETE'])
 def delete_account(SID):
     
-    #deleting from SignUp
     signup_delete = SignUp.query.get(SID)
 
     # check if the user exists in sign up 
     if not signup_delete:
         return jsonify({'code':403})
 
+    #deleting from SignUp
     db.session.delete(signup_delete)
     db.session.commit()
 
