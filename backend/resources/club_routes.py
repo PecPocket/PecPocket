@@ -54,7 +54,7 @@ def update_club(SID):
     club_detail = Clubs.query.get(SID)
 
     SID = request.json['SID']
-    Club_codes = request.json['Club_codes']
+    Club_codes = request.json['Club_codes'] # as a list
 
     signup_check = SignUp.query.get(SID)
 
@@ -71,8 +71,12 @@ def update_club(SID):
         db.session.commit()
         return jsonify({'code':200})
 
+    club_string = ""
+    for club in Club_codes:
+        club_string += str(club)
+
     club_detail.SID = SID
-    club_detail.Club_codes = Club_codes
+    club_detail.Club_codes = club_string
 
     db.session.commit()
 
