@@ -193,7 +193,7 @@
       "code" : 403
     }
 
-    ii. if the student has signed up
+    ii. if clubs were successfully added
     {
         "code" : 200
     }
