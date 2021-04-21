@@ -1,15 +1,58 @@
 #pylint: disable-all
 
 
-from flask import Blueprint, Response, request, jsonify, send_from_directory, abort, current_app
+from flask import Blueprint, Response, request, jsonify, send_from_directory, abort, current_app, app
 import os
 from os.path import dirname
 
-# studyblue = Blueprint("studyblue", __name__, None)
+studyblue = Blueprint("studyblue", __name__)
 
-# path = dirname(dirname(os.path.abspath(__file__)))
+path = dirname(dirname(os.path.abspath(__file__)))
+images_path = path + "/static/images"
+pdfs_path = path + "/static/pdf"
 
-# images_path = path + "/static/images"
+def config(app):
+    with app.app_context():
+        app.config['STUDY_IMAGES'] = images_path
+        app.config['STUDY_PDFS'] = pdfs_path
+
+
+#app.config['STUDY_IMAGES'] = images_path
+
+@studyblue.route('/upload/image', methods=['POST'])
+def upload_image():
+    # check if file is there
+    if not request.files['image']:
+        # there is no file
+        return jsonify({'code':503})
+
+    current_file = request.files['image']
+    file_name = current_file.filename
+    current_file.save(os.path.join(images_path, file_name))
+
+    return jsonify({'code':200})
+
+
+@studyblue.route('/upload/pdf', methods=['POST'])
+def upload_pdf():
+    # check if file is there
+    if not request.files['pdf']:
+        # there is no file
+        return jsonify({'code':503})
+
+    current_file = request.files['pdf']
+    file_name = current_file.filename
+    current_file.save(os.path.join(pdfs_path, file_name))
+
+    return jsonify({'code':200})
+
+
+
+
+
+
+
+
 
 # studyblue.config = {}
 

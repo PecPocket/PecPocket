@@ -17,7 +17,7 @@ from resources.fetch_student_list import stulistblue
 # from resources.study_material_routes import studyblue
 from resources.pec_social_route import pecsocialblue
 from resources.search_routes import searchblue
-
+from resources.study_material_routes import studyblue, config
 
 app = Flask(__name__)
 
@@ -29,6 +29,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
 db_initialiser(app)
+config(app)
 
 
 app.register_blueprint(superblue)
@@ -43,6 +44,7 @@ app.register_blueprint(stulistblue)
 # app.register_blueprint(studyblue)
 app.register_blueprint(pecsocialblue)
 app.register_blueprint(searchblue)
+app.register_blueprint(studyblue)
 
 app.run(debug=True)
 
