@@ -1,45 +1,54 @@
 # #pylint: disable-all
 
-# from flask import Blueprint, Response, request, jsonify
-# from database.models import Personal, PersonalSchema, Clubs, ClubSchema,  db, ma, personals_schema, clubs_schema, ClubConvertor
-# import json
-# from sqlalchemy import or_
+from flask import Blueprint, Response, request, jsonify
+from database.models import Personal, PersonalSchema, db, ma, personals_schema, ClubConvertor
+import json
+from sqlalchemy import or_
+import flask
 
 
-# pecsocialblue = Blueprint("pecsocialblue", __name__)
+pecsocialblue = Blueprint("pecsocialblue", __name__)
 
-# @pecsocialblue.route("/social", methods=["GET"])
-# def get_social():
+@pecsocialblue.route("/social", methods=["GET"])
+def get_social():
 
-#     word = str(request.args['query'])
-#     search = "%{}%".format(word)
+    word = str(request.args['query'])
+    search = "%{}%".format(word)
 
-#     all_personals = Personal.query.filter(or_(Personal.Name.like(search),Personal.SID.like(search) )).all()
+    check_in_club_convertor = ClubConvertor.query.filter(ClubConvertor.Club.like(search)).first()
 
-#     if len(all_personals) == 0:
-#         return jsonify({"code": 404})
+    search_club = "xx"
 
-    
+    if check_in_club_convertor:
+        search_club = "%{}%".format(check_in_club_convertor.Club_code)
 
-#     for person in all_personals:
-#         sid = person.SID
-#         club_list = []
-#         club_search = Clubs.query.get(sid)
+    all_personals = Personal.query.filter(or_(Personal.Name.like(search),Personal.SID.like(search), Personal.Club_codes.like(search_club) )).all()
+
+    if len(all_personals) == 0:
+        return jsonify({"code": 404})
+
+    final_list = []
+
+    for person in all_personals:
+        sid = person.SID
+        club_list = []
 #         # response1 = jsonify({"random": 1})
-#         if club_search:
+        if person.Club_codes is not None:
 
-#             club_codes = club_search.Club_codes
-#             for i in range(0,len(club_codes),2):
-#                 club_str = club_codes[i:i+2]
+            club_codes = person.Club_codes
+            for i in range(0,len(club_codes),2):
+                club_str = club_codes[i:i+2]
 
-#                 #convert codes into names
-#                 club_name = ClubConvertor.query.get(club_str).Club
-#                 club_list.append(club_name)
-#         response1 = jsonify({"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list})
+                # convert codes into names
+                club_name = ClubConvertor.query.get(club_str).Club
+                club_list.append(club_name)
+        response1 = {"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list}
 
-#         return response1
-#         # club_search = clubs_schema.dump(club_search)
-#         # return jsonify(club_search)
+        final_list.append(response1)
+
+    return jsonify({"Students" : final_list})
+
+
 
 
 

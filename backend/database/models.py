@@ -132,7 +132,7 @@ def db_initialiser(app):
     with app.app_context():
         pass
         #db.drop_all()
-        db.create_all()
+        # db.create_all()
 
         
 

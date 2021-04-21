@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Personal, PersonalSchema, personal_schema, personals_schema, db, ma
+from database.models import Personal, PersonalSchema, personal_schema, personals_schema, ClubConvertor, db, ma
 
 personalblue = Blueprint("personal", __name__)
 
@@ -65,6 +65,34 @@ def add_insta(SID):
     db.session.commit()
 
     return jsonify({"code": 200})
+
+# Get personal data during view profile 
+@personalblue.route('/viewprofile/<SID>', methods=["GET"])
+def get_profile(SID):
+
+    person = Personal.query.get(SID)
+
+    if not person:
+        return jsonify({"code": 404})
+    
+    sid = person.SID
+    club_list = []
+    if person.Club_codes is not None:
+
+        club_codes = person.Club_codes
+        for i in range(0,len(club_codes),2):
+            club_str = club_codes[i:i+2]
+
+            # convert codes into names
+            club_name = ClubConvertor.query.get(club_str).Club
+            club_list.append(club_name)
+    response = jsonify({"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list})
+
+    return response
+
+
+
+
 
 
 
