@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 
-from flask import Blueprint, Response, request, jsonify, send_from_directory, abort, current_app, app
+from flask import Blueprint, Response, request, jsonify, send_from_directory, current_app, app
 import os
 from os.path import dirname
 
@@ -23,7 +23,7 @@ def config(app):
 def upload_image():
     # check if file is there
     if not request.files['image']:
-        # there is no file
+        # there is no file, empty upload 
         return jsonify({'code':503})
 
     current_file = request.files['image']
@@ -37,7 +37,7 @@ def upload_image():
 def upload_pdf():
     # check if file is there
     if not request.files['pdf']:
-        # there is no file
+        # there is no file, empty upload
         return jsonify({'code':503})
 
     current_file = request.files['pdf']
@@ -46,9 +46,30 @@ def upload_pdf():
 
     return jsonify({'code':200})
 
+@studyblue.route('/download/image/<image_name>',  methods=['GET'])
+def download_image(image_name):
+    # check if the file exists
+    try:
+        return send_from_directory(
+            images_path, filename = image_name, as_attachment = True
+        )
+
+    except FileNotFoundError:
+        # file not found
+        return jsonify({'code': 504})
 
 
+@studyblue.route('/download/pdf/<pdf_name>',  methods=['GET'])
+def download_pdf(pdf_name):
+    # check if the file exists
+    try:
+        return send_from_directory(
+            pdfs_path, filename = pdf_name, as_attachment = True
+        )
 
+    except FileNotFoundError:
+        # file not found
+        return jsonify({'code': 504})
 
 
 
