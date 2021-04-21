@@ -1,4 +1,4 @@
-# Documentation for Notification Lists Back End Api
+# Documentation for Notification Lists Back End Api ( DO NOT USE RN, IMCOMPLETE)
 
 ## 1. To Get list of students in a Class of a CR
 

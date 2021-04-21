@@ -64,10 +64,6 @@ def add_club():
 # Update a Club Row
 @clubblue.route('/club/<SID>', methods=['PUT'])
 def update_club(SID):
-    personal_info = Personal.query.get(SID)
-
-    SID = request.json['SID']
-    Club_list = request.json['Club_codes'] # as a list
 
     signup_check = SignUp.query.get(SID)
 
@@ -75,9 +71,14 @@ def update_club(SID):
         #student not signed up
         return jsonify({'code': 404})
 
-    if not personal_info.Club_codes :
-        # student has no current clubs, make a POST request
-        return jsonify({'code':501})
+    personal_info = Personal.query.get(SID)
+
+    SID = request.json["SID"]
+    Club_list = request.json["Club_codes"] # as a list
+
+    # if not personal_info.Club_codes :
+    #     # student has no current clubs, make a POST request
+    #     return jsonify({'code':501})
 
     if Club_list is None :
         personal_info.Club_codes = ""
@@ -101,15 +102,17 @@ def update_club(SID):
 # GET a list of clubs for a particular SID
 @clubblue.route('/club/<SID>', methods =['GET'])
 def get_clubs(SID):
-    personal_info = Personal.query.get(SID)
-
-    clubs_of_student = personal_info.Club_codes
+    
 
     signup_check = SignUp.query.get(SID)
 
     if not signup_check:
         #student not signed up
         return jsonify({'code':404})
+
+    personal_info = Personal.query.get(SID)
+
+    clubs_of_student = personal_info.Club_codes
 
     if len(personal_info.Club_codes) == 0 :
         # student has no club

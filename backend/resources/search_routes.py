@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import SubConvertor, SubConvertorSchema, sub_convertor_schema, sub_convertors_schema, db, ma
+from database.models import SubConvertor, SubConvertorSchema, sub_convertor_schema, sub_convertors_schema, ClubConvertor, club_convertors_schema, db, ma
 
 from sqlalchemy import or_
 
@@ -13,7 +13,7 @@ searchblue = Blueprint("searchblue", __name__)
 def search_sub():
     word = str(request.args['query'])
     search = "%{}%".format(word)
-    subject_list = SubConvertor.query.filter(or_(SubConvertor.Sub_code.like(search),SubConvertor.Subject.like(search) ))
+    subject_list = SubConvertor.query.filter(or_(SubConvertor.Sub_code.like(search),SubConvertor.Subject.like(search) )).all()
 
     if not subject_list :
         # no such subject exists

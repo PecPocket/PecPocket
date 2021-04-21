@@ -53,7 +53,6 @@
       "code" : x  (int)
     }
     x -> 404 if sid does not exist in sign up table
-    x -> 501 if student has no clubs currently
     x -> 200 if updation of Clubs is successful
 
 

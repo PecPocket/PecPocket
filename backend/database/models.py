@@ -131,8 +131,8 @@ def db_initialiser(app):
     ma.init_app(app)
     with app.app_context():
         pass
-        #db.drop_all()
-        # db.create_all()
+        # db.drop_all()
+        db.create_all()
 
         
 
