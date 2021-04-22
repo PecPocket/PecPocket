@@ -93,7 +93,7 @@ class PersonalSchema(ma.Schema):
 
 # Club convertor
 class ClubConvertor(db.Model):
-    Club_code = db.Column(db.String(100), primary_key=True, nullable=False)
+    Club_code = db.Column(db.String(100), primary_key=True)
     Club = db.Column(db.String(50), nullable=False)
 
     def __init__(self, Club_code, Club):
@@ -104,6 +104,42 @@ class ClubConvertorSchema(ma.Schema):
     class Meta:
         fields = ("Club_code", "Club")
 
+
+# Notifications 
+class Notifications(db.Model):
+    Noti_id = db.Column(db.Integer, primary_key=True)
+    Topic = db.Column(db.String(50), nullable=False)
+    Description = db.Column(db.Text)
+    Date = db.Column(db.Date)
+    Time = db.Column(db.Time)
+    Students = db.relationship('StudentNoti', backref = 'Content')
+
+    def __init__(self, Noti_id, Topic, Description, Date, Time):
+        self.Noti_id = Noti_id
+        self.Topic = Topic
+        self.Description = Description
+        self.Date = Date
+        self.Time = Time
+
+class NotificationsSchema(ma.Schema):
+    class Meta:
+        fields = ("Noti_id", "Topic", "Description", "Date", "Time")
+
+
+# Student Notifications
+class StudentNoti(db.Model):
+    ID = db.Column(db.Integer, primary_key=True)
+    SID = db.Column(db.Integer)
+    Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'))
+
+    def __init__(self, ID, SID, Noti_id):
+        self.ID = ID
+        self.SID = SID
+        self.Noti_id = Noti_id
+
+class StudentNotiSchema(ma.Schema):
+    class Meta:
+        fields = ("ID", "SID", "Noti_id")
 
 
 # Init Schema
@@ -124,14 +160,19 @@ sub_convertors_schema = SubConvertorSchema(many=True)
 club_convertor_schema = ClubConvertorSchema()
 club_convertors_schema = ClubConvertorSchema(many=True)
 
+noti_schema = NotificationsSchema()
+notis_schema = NotificationsSchema(many=True)
+
+studentnoti_schema = StudentNotiSchema()
+studentnotis_schema = StudentNotiSchema(many=True)
 
 
 def db_initialiser(app):
     db.init_app(app)
     ma.init_app(app)
     with app.app_context():
-        pass
-        # db.drop_all()
+        #pass
+        #db.drop_all()
         db.create_all()
 
         
