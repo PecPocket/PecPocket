@@ -44,14 +44,16 @@ class SignUpSchema(ma.Schema):
 class Authorization(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Auth = db.Column(db.Integer, nullable=False)
+    Domain = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, SID, Auth):
+    def __init__(self, SID, Auth, Domain):
         self.SID = SID
         self.Auth = Auth
+        self.Domain = Domain
 
 class AuthorizationSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "Auth")
+        fields = ("SID", "Auth", "Domain")
 
 
 # Sub convertor
@@ -173,8 +175,9 @@ def db_initialiser(app):
     ma.init_app(app)
     with app.app_context():
         #pass
-        #db.drop_all()
-        db.create_all()
+        # db.drop_all()
+        # db.create_all()
+        pass
 
         
 
