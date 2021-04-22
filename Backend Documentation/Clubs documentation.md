@@ -12,22 +12,23 @@
       "code" : x (int)
      }
 
-    x -> 404 If Student not in SignUp
+    x -> 403 If Student not in SignUp
     x -> 407 If Student does not have any club
 
     ii. 
     {
-        "clubs" : ["list", "of", "club", "names"]   (lsit of strings)
+        "clubs" : ["list", "of", "club", "names"]   (list of strings)
     }
 
     eg 
     http://127.0.0.1:5000/signup/19193096 -- [GET]
 
     returns - 
+    i. If student not signed up
     {
-      "code" : 404
+      "code" : 403
     }
-    If student not signed up
+    
 
     http://127.0.0.1:5000/signup/19193098 -- [GET]
 
@@ -52,12 +53,30 @@
     {
       "code" : x  (int)
     }
-    x -> 404 if sid does not exist in sign up table
+    x -> 403 if sid does not exist in sign up table
+    x -> 501 if the student currently has no clubs to update 
+         (make  a POST request instead)
     x -> 200 if updation of Clubs is successful
 
 
+## 3. To add clubs for an SID
 
-## 3. To Add/Update instagram handle 
+    href - ../club -- [POST]
+    body - 
+    {
+      "SID" : sid,  (int)
+      "Club_codes" : ["list", "of", "club", "codes"]    (list of strings)
+    }
+
+    returns - 
+    {
+      'code' : x (int)
+    }
+    x -> 403 if sid does not exist in sign up table
+    x -> 200 if the club codes are successfully added as a string
+
+
+## 4. To Add/Update instagram handle 
 
     href - ../insta/<SID> -- [PUT]
     
