@@ -68,11 +68,44 @@ notiblue = Blueprint("notiblue", __name__)
 
 #     return jsonify({'code':200})
 
-flag = 0
+def delete_notis():
+    current_date = datetime.now().date()
+    current_time = datetime.now().time()
+
+    for i in range(1,201,1):
+        noti_info = Notifications.query.get(i)
+
+        if not noti_info :
+            # the noti doesnt exist
+            return jsonify({'code': 405})
+
+        date = noti_info.Date
+        time = noti_info.Time
+
+        # check if the today's date > noti date 
+        if current_date > date :
+            # delete noti
+            db.session.delete(noti_info)
+            db.session.commit()
+
+
+        elif current_date == date :
+            # same date but now check time 
+            if current_time > time :
+                # delete noti
+                db.session.delete(noti_info)
+                db.session.commit()
+
+        # else don't delete the noti 
+        return 
+
+
+
+global flag 
+flag = 1
 
 @notiblue.route('/noti/<SID>', methods=['POST'])
 def add_noti(SID):
-
     auth_check = Authorization.query.get(SID)
 
     if not auth_check:
@@ -81,6 +114,7 @@ def add_noti(SID):
     
     # to check if CR or Seccy
     code = auth_check.Auth
+    print(code)
 
     #getting student list
     student_list = []
@@ -90,17 +124,16 @@ def add_noti(SID):
         cr = Personal.query.get(SID)
         branch = cr.Branch
         semester = cr.Semester
-        student_list = Personal.query.filter_by(Branch=branch, Semester=semester).all()
+        students = Personal.query.filter_by(Branch=branch, Semester=semester).all()
 
-
-        for students in student_list:
-            student_list.append(students.SID)
+        for student in students:
+            student_list.append(student.SID)
 
     elif code == 2:
         club =auth_check.Domain
 
         search = "%{}%".format(club)
-        club_check = ClubConvertor.query.get(Club_code)
+        club_check = ClubConvertor.query.get(club)
         results = Personal.query.filter(Personal.Club_codes.like(search)).all()
 
         if not club_check:
@@ -115,6 +148,8 @@ def add_noti(SID):
             
 
     #deleting if flag is 200 (yet to be done) (date time ka stuff)
+    if flag == 499:
+        delete_notis()
 
 
     #making the Noti_id
@@ -123,7 +158,11 @@ def add_noti(SID):
         checker = Notifications.query.filter(Notifications.Noti_id == flag).first()
 
         if checker:
-            flag = (flag+1)%200
+            if flag == 499:
+                flag = 1
+
+            else:
+                flag = (flag+1)%500
         else:
             a = False
 
@@ -150,6 +189,63 @@ def add_noti(SID):
         db.session.commit()
 
     return jsonify({"code" : 200})
+
+
+
+@notiblue.route('/noti/<SID>', methods=['GET'])
+def get_noti(SID):
+    notis = StudentNoti.query.get(SID).all()
+
+    if not notis :
+        # no notifications for this SID
+        return jsonify({'code':406})
+
+    notis_list = []
+
+    for noti in notis :
+        noti_id = noti.Noti_id
+        noti_info = Notifications.query.get(noti_id)
+
+        if not noti_info :
+            return jsonify({'code': 405})
+
+        # check if this noti is expired or not
+        current_date = datetime.now().date()
+        current_time = datetime.now().time()
+        date = noti_info.Date
+        time = noti_info.Time
+
+        # check if the today's date > noti date 
+        if current_date > date :
+            # delete noti
+            db.session.delete(noti_info)
+            db.session.commit()
+
+        elif current_date == date :
+            # same date but now check time 
+            if current_time > time :
+                # delete noti
+                db.session.delete(noti_info)
+                db.session.commit()
+
+
+        # if not expired then store in a variable
+        notis_list.append(noti_info)
+
+        # delete this noti from student notifications table
+        noti_to_delete = StudentNoti.query.filter_by(Noti_id = noti_id).first()
+        db.session.delete(noti_to_delete)
+        db.session.commit()
+
+
+    # now if all the notis were expired and notis list is empty
+    if notis_list is None :
+        return jsonify({'code':406})
+
+
+    # if all is fine return the notis list
+    return jsonify({'Notifications' : notis_list})
+
 
 
     

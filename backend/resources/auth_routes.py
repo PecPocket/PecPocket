@@ -26,12 +26,14 @@ def add_auth():
 
     return jsonify({'code':200})
 
+
 # GET Auth
 @authblue.route('/auth/<SID>', methods=['GET'])
 def get_auth(SID):
     auth_info = Authorization.query.get(SID)
     result = authorization_schema.dump(auth_info)
     return jsonify(result)
+
 
 # Update Auth
 @authblue.route('/auth/<SID>', methods=['PUT'])
@@ -57,7 +59,6 @@ def update_Auth(SID):
         db.session.delete(auth_info)
         db.session.commit()
         return jsonify({'code':200})
-
 
     db.session.commit()
 

@@ -131,12 +131,10 @@ class NotificationsSchema(ma.Schema):
 
 # Student Notifications
 class StudentNoti(db.Model):
-    #ID = db.Column(db.Integer, primary_key=True)
     SID = db.Column(db.Integer, primary_key=True)
     Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'), primary_key=True, nullable=False)
 
     def __init__(self, SID, Noti_id):
-        #self.ID = ID
         self.SID = SID
         self.Noti_id = Noti_id
 
@@ -176,7 +174,7 @@ def db_initialiser(app):
     with app.app_context():
         #pass
         # db.drop_all()
-        db.create_all()
+        #db.create_all()
         pass
 
         
