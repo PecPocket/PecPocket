@@ -44,14 +44,16 @@ class SignUpSchema(ma.Schema):
 class Authorization(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Auth = db.Column(db.Integer, nullable=False)
+    Domain = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, SID, Auth):
+    def __init__(self, SID, Auth, Domain):
         self.SID = SID
         self.Auth = Auth
+        self.Domain = Domain
 
 class AuthorizationSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "Auth")
+        fields = ("SID", "Auth", "Domain")
 
 
 # Sub convertor
@@ -129,12 +131,12 @@ class NotificationsSchema(ma.Schema):
 
 # Student Notifications
 class StudentNoti(db.Model):
-    ID = db.Column(db.Integer, primary_key=True)
-    SID = db.Column(db.Integer)
-    Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'), nullable=False)
+    #ID = db.Column(db.Integer, primary_key=True)
+    SID = db.Column(db.Integer, primary_key=True)
+    Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'), primary_key=True, nullable=False)
 
-    def __init__(self, ID, SID, Noti_content):
-        self.ID = ID
+    def __init__(self, SID, Noti_content):
+        #self.ID = ID
         self.SID = SID
         self.Noti_id = Noti_content.Noti_id
 
@@ -173,8 +175,9 @@ def db_initialiser(app):
     ma.init_app(app)
     with app.app_context():
         #pass
-        #db.drop_all()
-        db.create_all()
+        # db.drop_all()
+        # db.create_all()
+        pass
 
         
 

@@ -11,6 +11,7 @@ authblue = Blueprint("authblue", __name__)
 def add_auth():
     SID = request.json['SID']
     Auth = request.json['Auth']
+    Domain = request.json['Domain']
 
     # check if already exists in Auth
     sid_in_auth = Authorization.query.get(SID)
@@ -18,7 +19,7 @@ def add_auth():
         # Authorization already granted
         return jsonify({'code':405})
 
-    new_auth = Authorization(SID, Auth)
+    new_auth = Authorization(SID, Auth, Domain)
 
     db.session.add(new_auth)
     db.session.commit()
@@ -39,6 +40,7 @@ def update_Auth(SID):
 
     SID = request.json['SID']
     Auth = request.json['Auth'] # new Auth
+    Domain = request.json['Domain']
 
     # check if Auth already exists
     if not auth_info:
@@ -47,6 +49,7 @@ def update_Auth(SID):
 
     auth_info.SID = SID
     auth_info.Auth = Auth
+    auth_info.Domain = Domain
 
     # check if Auth is changed to 0 
     if Auth == 0 :
