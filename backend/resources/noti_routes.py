@@ -8,7 +8,7 @@ from datetime import datetime
 notiblue = Blueprint("notiblue", __name__)
 
 # @notiblue.route('/noti', methods=['POST'])
-# def add_noti():
+# def add_notif():
 #     Noti_id = request.json['Noti_id']
 #     Topic = request.json['Topic']
 #     Description = request.json['Description']
@@ -38,7 +38,7 @@ notiblue = Blueprint("notiblue", __name__)
 #         # no notification for this id in notifications table
 #         return jsonify({'cdoe': 505})
 
-#     new_studentnoti = StudentNoti(SID, relevant_noti)
+#     new_studentnoti = StudentNoti(SID, relevant_noti.Noti_id)
 
 #     db.session.add(new_studentnoti)
 #     db.session.commit()
