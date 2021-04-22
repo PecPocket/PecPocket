@@ -4,6 +4,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from sqlalchemy.orm import backref
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -112,7 +113,7 @@ class Notifications(db.Model):
     Description = db.Column(db.Text)
     Date = db.Column(db.Date)
     Time = db.Column(db.Time)
-    Students = db.relationship('StudentNoti', backref = 'Content')
+    Students = db.relationship('StudentNoti',  cascade = "all,delete", backref = backref('Noti_content'))
 
     def __init__(self, Noti_id, Topic, Description, Date, Time):
         self.Noti_id = Noti_id
@@ -130,16 +131,16 @@ class NotificationsSchema(ma.Schema):
 class StudentNoti(db.Model):
     ID = db.Column(db.Integer, primary_key=True)
     SID = db.Column(db.Integer)
-    Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'))
+    Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'), nullable=False)
 
-    def __init__(self, ID, SID, Noti_id):
+    def __init__(self, ID, SID, Noti_content):
         self.ID = ID
         self.SID = SID
-        self.Noti_id = Noti_id
+        self.Noti_id = Noti_content.Noti_id
 
 class StudentNotiSchema(ma.Schema):
     class Meta:
-        fields = ("ID", "SID", "Noti_id")
+        fields = ("SID", "Noti_id")
 
 
 # Init Schema

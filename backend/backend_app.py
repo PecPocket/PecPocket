@@ -18,6 +18,8 @@ from resources.fetch_student_list import stulistblue
 from resources.pec_social_route import pecsocialblue
 from resources.search_routes import searchblue
 from resources.study_material_routes import studyblue, config
+from resources.noti_routes import notiblue
+
 
 app = Flask(__name__)
 
@@ -45,6 +47,7 @@ app.register_blueprint(stulistblue)
 app.register_blueprint(pecsocialblue)
 app.register_blueprint(searchblue)
 app.register_blueprint(studyblue)
+app.register_blueprint(notiblue)
 
 app.run(debug=True)
 
