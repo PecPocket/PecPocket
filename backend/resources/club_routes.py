@@ -29,36 +29,7 @@ def add_club():
     db.session.commit()
 
     # returns the created json 
-    return personal_schema.jsonify(personal_info)
-
-# after we get clubs list --> then make personal or not 
-
-# # creating club row during signup 
-# @clubblue.route('/signupclub', methods=["POST"])
-# def clubs_add():
-#     SID = request.json['SID']
-#     club_list = request.json['Clubs'] # as a list
-
-#     signup_info = SignUp.query.get(SID)
-#     if not signup_info :
-#         # not signed up
-#         return jsonify({'code':403})
-
-        
-#     if club_list is None :
-#         # empty list
-#         return jsonify({'code':200})
-
-#     club_string = ""
-#     for club in club_list:
-#         club_string += str(club)
-    
-#     new_club = Clubs(SID, club_string)
-
-#     db.session.add(new_club)
-#     db.session.commit()
-
-#     return jsonify({"code" : 200})
+    return jsonify({'code':200})
 
 
 # Update a Club Row
@@ -67,18 +38,18 @@ def update_club(SID):
 
     signup_check = SignUp.query.get(SID)
 
-    if not signup_check:
-        #student not signed up
-        return jsonify({'code': 404})
-
-    personal_info = Personal.query.get(SID)
-
     SID = request.json["SID"]
     Club_list = request.json["Club_codes"] # as a list
 
-    # if not personal_info.Club_codes :
-    #     # student has no current clubs, make a POST request
-    #     return jsonify({'code':501})
+    if not signup_check:
+        #student not signed up
+        return jsonify({'code': 403})
+
+    personal_info = Personal.query.get(SID)
+
+    if not personal_info.Club_codes :
+        # student has no current clubs, make a POST request
+        return jsonify({'code':501})
 
     if Club_list is None :
         personal_info.Club_codes = ""
@@ -108,7 +79,7 @@ def get_clubs(SID):
 
     if not signup_check:
         #student not signed up
-        return jsonify({'code':404})
+        return jsonify({'code':403})
 
     personal_info = Personal.query.get(SID)
 
