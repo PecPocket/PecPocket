@@ -46,7 +46,7 @@ def add_studentnoti():
     db.session.commit()
 
     return jsonify({'code':200})
-
+    
 
 @notiblue.route('/deletenotis/<Noti_id>', methods=['DELETE'])
 def delete_notis(Noti_id):
