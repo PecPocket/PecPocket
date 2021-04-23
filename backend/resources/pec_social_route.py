@@ -15,14 +15,28 @@ def get_social():
     word = str(request.args['query'])
     search = "%{}%".format(word)
 
-    check_in_club_convertor = ClubConvertor.query.filter(ClubConvertor.Club.like(search)).first()
+    check_in_club_convertor = []
+
+    check_in_club_convertor = ClubConvertor.query.filter(ClubConvertor.Club.like(search)).all()
+
+    len_club = len(check_in_club_convertor)
 
     search_club = "xx"
+    all_personals = []
 
-    if check_in_club_convertor:
-        search_club = "%{}%".format(check_in_club_convertor.Club_code)
+    if len_club == 0:
+        # return jsonify({"code" : 10})
+        all_personals = Personal.query.filter(or_(Personal.Name.like(search),Personal.SID.like(search))).all()
 
-    all_personals = Personal.query.filter(or_(Personal.Name.like(search),Personal.SID.like(search), Personal.Club_codes.like(search_club) )).all()
+    else :
+        for i in range(len_club):
+            # return jsonify({"club" : check_in_club_convertor[i].Club_code} )
+            search_club = "%{}%".format(check_in_club_convertor[i].Club_code)
+            temp = Personal.query.filter(or_(Personal.Name.like(search),Personal.SID.like(search),Personal.Club_codes.like(search_club))).all()
+            all_personals.extend(temp)
+            # or_(Personal.Name.like(search),Personal.SID.like(search),
+
+    
 
     if len(all_personals) == 0:
         return jsonify({"code": 404})
