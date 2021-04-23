@@ -59,24 +59,7 @@
     x -> 200 if updation of Clubs is successful
 
 
-## 3. To add clubs for an SID
-
-    href - ../club -- [POST]
-    body - 
-    {
-      "SID" : sid,  (int)
-      "Club_codes" : ["list", "of", "club", "codes"]    (list of strings)
-    }
-
-    returns - 
-    {
-      'code' : x (int)
-    }
-    x -> 403 if sid does not exist in sign up table
-    x -> 200 if the club codes are successfully added as a string
-
-
-## 4. To Add/Update instagram handle 
+## 3. To Add/Update instagram handle 
 
     href - ../insta/<SID> -- [PUT]
     
