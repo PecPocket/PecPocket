@@ -36,8 +36,9 @@ def get_social():
             all_personals.extend(temp)
             # or_(Personal.Name.like(search),Personal.SID.like(search),
 
+    # to remove duplicates
+    all_personals = list(dict.fromkeys(all_personals))
     
-
     if len(all_personals) == 0:
         return jsonify({"code": 404})
 
