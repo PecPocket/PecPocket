@@ -95,7 +95,14 @@ def get_profile(SID):
     return response
 
 
+@personalblue.route('/personal/delete/<SID>', methods=['DELETE'])
+def delete_personal(SID):
+    personal_info = Personal.query.get(SID)
 
+    db.session.delete(personal_info)
+    db.session.commit()
+
+    return jsonify({'code':200})
 
 
 

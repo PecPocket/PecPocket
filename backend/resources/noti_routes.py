@@ -173,7 +173,7 @@ def add_noti(SID):
     Time = request.json['Time']
 
     new_date = datetime.strptime(Date, '%d-%m-%Y').date()
-    new_time = datetime.strptime(Time, '%H:%M').time()
+    new_time = datetime.strptime(Time, '%I:%M %p').time()
 
     # saving the noti in Notifications Table
     new_noti = Notifications(Noti_id, Topic, Description, new_date, new_time)
@@ -193,7 +193,7 @@ def add_noti(SID):
 
 @notiblue.route('/noti/<SID>', methods=['GET'])
 def get_noti(SID):
-    notis = StudentNoti.query.get(SID).all()
+    notis = StudentNoti.query.filter_by(SID = SID).all()
 
     if not notis :
         # no notifications for this SID
@@ -227,23 +227,26 @@ def get_noti(SID):
                 db.session.delete(noti_info)
                 db.session.commit()
 
+        else : 
+            # the notification is still valid
+            date = noti_info.Date.strftime('%d-%m-%Y')
+            time = noti_info.Time.strftime('%I:%M %p')
+            # if not expired then store in a variable
+            response = {"Topic": noti_info.Topic, "Description": noti_info.Description, "Date":date, "Time": time}
+            notis_list.append(response)
 
-        # if not expired then store in a variable
-        notis_list.append(noti_info)
-
-        # delete this noti from student notifications table
-        noti_to_delete = StudentNoti.query.filter_by(Noti_id = noti_id).first()
-        db.session.delete(noti_to_delete)
-        db.session.commit()
+            # delete this noti from student notifications table
+            noti_to_delete = StudentNoti.query.filter_by(SID = SID, Noti_id = noti_id).first()
+            db.session.delete(noti_to_delete)
+            db.session.commit()
 
 
     # now if all the notis were expired and notis list is empty
     if notis_list is None :
         return jsonify({'code':406})
 
-
     # if all is fine return the notis list
-    return jsonify({'Notifications' : notis_list})
+    return jsonify({"Notifications" : notis_list})
 
 
 
