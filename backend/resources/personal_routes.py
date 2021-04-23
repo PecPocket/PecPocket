@@ -35,6 +35,7 @@ def update_personal(SID):
     #return for successful creation
     return jsonify({'code':200})
 
+
 #Get all personal
 @personalblue.route('/personal', methods=['GET'])
 def get_personals():
@@ -42,12 +43,14 @@ def get_personals():
     result = personals_schema.dump(all_personals)
     return jsonify(result)
 
+
 #Get Single personal
 @personalblue.route('/personal/<SID>', methods=['GET'])
 def get_super(SID):
     single_personal = Personal.query.get(SID)
     result = personal_schema.dump(single_personal)
     return jsonify(result)
+
 
 # Add instagram handle to personal
 @personalblue.route('/insta/<SID>', methods=["PUT"])
@@ -65,6 +68,7 @@ def add_insta(SID):
     db.session.commit()
 
     return jsonify({"code": 200})
+
 
 # Get personal data during view profile 
 @personalblue.route('/viewprofile/<SID>', methods=["GET"])
@@ -86,7 +90,7 @@ def get_profile(SID):
             # convert codes into names
             club_name = ClubConvertor.query.get(club_str).Club
             club_list.append(club_name)
-    response = jsonify({"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list})
+    response = jsonify({"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list, "Insta" : person.Insta})
 
     return response
 

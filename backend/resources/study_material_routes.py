@@ -18,7 +18,6 @@ def config(app):
         app.config['STUDY_PDFS'] = pdfs_path
 
 
-
 @studyblue.route('/upload/image', methods=['POST'])
 def upload_image():
     # check if file is there

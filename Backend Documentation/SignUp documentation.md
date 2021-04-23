@@ -36,12 +36,16 @@
 
 
     returns - 
-    i. If entry with this sid already exists 
+    i. if the sid doesn't exist in the database
+    {
+      "code" : 401
+    }
+    ii. If entry with this sid already exists 
     {
       "code" : 402
     }
     
-    ii. If Sign Up successful
+    iii. If Sign Up successful
     }
     {
       "code" : 200,

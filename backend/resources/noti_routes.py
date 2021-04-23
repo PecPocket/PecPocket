@@ -99,9 +99,7 @@ def delete_notis():
         # else don't delete the noti 
         return 
 
-
-
-global flag 
+ 
 flag = 1
 
 @notiblue.route('/noti/<SID>', methods=['POST'])
@@ -148,6 +146,7 @@ def add_noti(SID):
             
 
     #deleting if flag is 200 (yet to be done) (date time ka stuff)
+    global flag
     if flag == 499:
         delete_notis()
 

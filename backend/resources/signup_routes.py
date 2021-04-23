@@ -77,11 +77,12 @@ def sign_up():
     hashed_pwd = bcrypt.hashpw(Password.encode('utf-8'), bcrypt.gensalt())
     new_signup = SignUp(SID, hashed_pwd)
 
-    db.session.add(new_signup)
-    db.session.commit()
-    
     # get name from super 
     super_details = Super.query.get(SID)
+
+    if not super_details:
+        return jsonify({'code':401})
+
     Name = super_details.Name
 
     # get branch name
@@ -96,6 +97,10 @@ def sign_up():
     # ADD TO PERSONAL TABLE
     db.session.add(Personal(SID, Name, Branch, Year, Semester, "","-"))
     db.session.commit()
+
+    db.session.add(new_signup)
+    db.session.commit()
+    
 
     auth_info = Authorization.query.get(SID)
     if not auth_info:
