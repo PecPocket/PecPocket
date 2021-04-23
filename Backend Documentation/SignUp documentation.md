@@ -139,7 +139,7 @@
 
     eg
 
-    href - ../subject/search/query?computer -- [GET]
+    href - ../subject/search?query=computer -- [GET]
 
     returns - 
     {
@@ -169,7 +169,7 @@
 
     eg
 
-    href - ../club/search?query= -- [GET]
+    href - ../club/search?query=P -- [GET]
 
     returns - 
     {
@@ -187,20 +187,17 @@
     href - ../signupclub -- [POST]
     body - 
     {
-        "SID" : "sid",  (int)
-        "Clubs" : ['club', 'codes', 'as', 'a', 'list']   (list of strings)
+      "SID" : sid,  (int)
+      "Club_codes" : ["list", "of", "club", "codes"]    (list of strings)
     }
 
     returns - 
-    i. if the SID hasnt' signed up
     {
-      "code" : 403
+      'code' : x (int)
     }
-
-    ii. if clubs were successfully added
-    {
-        "code" : 200
-    }
+    x -> 403 if sid does not exist in sign up table
+    x -> 407 if sid already has clubs (Use PUT to update/change instead)
+    x -> 200 if the club codes are successfully added as a string
 
     eg 
 

@@ -16,6 +16,10 @@ def add_club():
     if not personal_info :
         # sid not in personal --> not signed up
         return jsonify({'code':403})
+    
+    if personal_info.Club_codes is not None:
+        #sid already has clubs
+        return jsonify({'code':407})
 
     if Club_list is None :
         # empty list
