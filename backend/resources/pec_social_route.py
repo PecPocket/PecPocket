@@ -61,7 +61,8 @@ def get_social():
 
         final_list.append(response1)
 
-    return jsonify({"Students" : final_list})
+    # return jsonify({"Students" : final_list})
+    return jsonify(final_list)
 
 
 
