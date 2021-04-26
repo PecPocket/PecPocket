@@ -8,79 +8,61 @@ from os.path import dirname
 studyblue = Blueprint("studyblue", __name__)
 
 path = dirname(dirname(os.path.abspath(__file__)))
-images_path = path + "/static/images"
-pdfs_path = path + "/static/pdf"
+file_path = path + '/static'
 
 
 def config(app):
     with app.app_context():
-        app.config['STUDY_IMAGES'] = images_path
-        app.config['STUDY_PDFS'] = pdfs_path
+        app.config['STUDY_IMAGES'] = file_path
 
 
-@studyblue.route('/upload/image', methods=['POST'])
-def upload_image():
+@studyblue.route('/upload/<subject_code>', methods=['POST'])
+def upload(subject_code):
+    print(request.files)
     # check if file is there
-    if not request.files['image']:
+    if not request.files['file']:
         # there is no file, empty upload 
         return jsonify({'code':404})
 
-    current_file = request.files['image']
+    current_file = request.files['file']
     file_name = current_file.filename
-    current_file.save(os.path.join(images_path, file_name))
 
+    #check if the dir already exists or not
+    file_path = path + "/static/" + subject_code
+
+    if not os.path.isdir(file_path):
+        os.mkdir(file_path)
+
+    current_file.save(os.path.join(file_path, file_name))
     return jsonify({'code':200})
 
 
-@studyblue.route('/upload/pdf', methods=['POST'])
-def upload_pdf():
-    # check if file is there
-    if not request.files['pdf']:
-        # there is no file, empty upload
-        return jsonify({'code':404})
-
-    current_file = request.files['pdf']
-    file_name = current_file.filename
-    current_file.save(os.path.join(pdfs_path, file_name))
-
-    return jsonify({'code':200})
-
-
-@studyblue.route('/getuploads/images', methods=['GET'])
-def get_image_uploads():
+@studyblue.route('/getuploads/<subject_code>', methods=['GET'])
+def get_image_uploads(subject_code):
     #get list from static images
-    dir_list = os.listdir(images_path)
+    file_path = path + '/static/' + subject_code
+
+    # if the directory is not there 
+    if not os.path.isdir(file_path):
+        return jsonify({'code':405})
+
+    dir_list = os.listdir(file_path)
+
+    if not dir_list:
+        #empty uploads 
+        return jsonify({'code':406})
 
     return jsonify({'Uploads': dir_list})
 
 
-@studyblue.route('/getuploads/pdfs', methods=['GET'])
-def get_pdf_uploads():
-    #get list from static pdfs
-    dir_list = os.listdir(pdfs_path)
+@studyblue.route('/download/<subject_code>/<image_name>',  methods=['GET'])
+def download_image(subject_code, image_name):
+    file_path = path + '/static/' + subject_code
 
-    return jsonify({'Uploads': dir_list})
-
-
-@studyblue.route('/download/image/<image_name>',  methods=['GET'])
-def download_image(image_name):
     # check if the file exists
     try:
         return send_from_directory(
-            images_path, filename = image_name, as_attachment = True
-        )
-
-    except FileNotFoundError:
-        # file not found
-        return jsonify({'code': 404})
-
-
-@studyblue.route('/download/pdf/<pdf_name>',  methods=['GET'])
-def download_pdf(pdf_name):
-    # check if the file exists
-    try:
-        return send_from_directory(
-            pdfs_path, filename = pdf_name, as_attachment = True
+            file_path, filename = image_name, as_attachment = True
         )
 
     except FileNotFoundError:
