@@ -52,19 +52,23 @@
     http://127.0.0.1:5000/noti/19103109 -- [GET]
 
     returns - 
-    {
-        "Notifications": [
-            {
-                "Date": "28-05-2021",
-                "Description": "Quiz syllabus -> until taught in class",
-                "Time": "06:30 PM",
-                "Topic": "EAD quiz"
-            },
-            {
-                "Date": "30-05-2021",
-                "Description": "Quiz syllabus -> until taught in class",
-                "Time": "04:30 PM",
-                "Topic": "DBMS quiz"
-            }
-        ]
-    }
+    [
+        {
+            "Date": "27-04-2021",
+            "Description": "Quiz syllabus -> until taught in class",
+            "Time": "10:00 AM",
+            "Topic": "DBMS quiz"
+        },
+        {
+            "Date": "29-04-2021",
+            "Description": "Quiz syllabus -> until taught in class",
+            "Time": "11:00 AM",
+            "Topic": "DBMS quiz"
+        },
+        {
+            "Date": "30-04-2021",
+            "Description": "Quiz syllabus -> until taught in class",
+            "Time": "10:30 AM",
+            "Topic": "EAD quiz"
+        }
+    ]

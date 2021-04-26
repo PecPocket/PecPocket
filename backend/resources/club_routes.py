@@ -17,7 +17,7 @@ def add_club():
         # sid not in personal --> not signed up
         return jsonify({'code':403})
     
-    if personal_info.Club_codes is not None:
+    if personal_info.Club_codes:
         #sid already has clubs
         return jsonify({'code':407})
 
@@ -56,7 +56,7 @@ def update_club(SID):
         return jsonify({'code':501})
 
     if Club_list is None :
-        personal_info.Club_codes = ""
+        personal_info.Club_codes = None
 
         db.session.commit()
         return jsonify({'code':200})
