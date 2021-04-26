@@ -173,7 +173,7 @@ def add_noti(SID):
     Time = request.json['Time']
 
     new_date = datetime.strptime(Date, '%d-%m-%Y').date()
-    new_time = datetime.strptime(Time, '%I:%M %p').time()
+    new_time = datetime.strptime(Time, '%H:%M').time()
 
     # saving the noti in Notifications Table
     new_noti = Notifications(Noti_id, Topic, Description, new_date, new_time)
@@ -230,7 +230,7 @@ def get_noti(SID):
         else : 
             # the notification is still valid
             date = noti_info.Date.strftime('%d-%m-%Y')
-            time = noti_info.Time.strftime('%I:%M %p')
+            time = noti_info.Time.strftime('%H:%M')
             # if not expired then store in a variable
             response = {"Topic": noti_info.Topic, "Description": noti_info.Description, "Date":date, "Time": time}
             notis_list.append(response)
