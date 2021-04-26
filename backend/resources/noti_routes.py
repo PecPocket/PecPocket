@@ -246,7 +246,7 @@ def get_noti(SID):
         return jsonify({'code':406})
 
     # if all is fine return the notis list
-    return jsonify({"Notifications" : notis_list})
+    return jsonify(notis_list)
 
 
 
