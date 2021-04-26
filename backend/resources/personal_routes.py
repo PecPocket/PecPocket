@@ -5,6 +5,24 @@ from database.models import Personal, PersonalSchema, personal_schema, personals
 
 personalblue = Blueprint("personal", __name__)
 
+def update_credentials():
+    all_personal = Personal.query.all()
+
+    for person in all_personal:
+        sid = person.SID
+
+        admyear = int(str(sid)[0:2])
+        currentyear = thisyear-admyear if thismonth<5 else thisyear-admyear+1
+        sem = currentyear*2 if thismonth<5 else currentyear*2-1
+
+        person.Semester = sem
+        person.Year = currentyear
+
+        db.session.commit()
+
+    return
+
+
 #Update Personal
 @personalblue.route("/personal/<SID>", methods=["PUT"])
 def update_personal(SID):
