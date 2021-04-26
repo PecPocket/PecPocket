@@ -9,7 +9,7 @@
         "Topic" : "Topic for the notification" (string),
         "Description" : "description for the notification" (string)
         "Date" : "of format dd-mm-yyyy" (string)
-        "Time" : "of format H:M AM/PM" (string)
+        "Time" : "of format H:M- 24 hour format" (string)
     }
 
     returns - 
@@ -28,7 +28,7 @@
         "Topic" : "EAD quiz",
         "Description" : "Quiz syllabus -> until taught in class",
         "Date" : "30-04-2021",
-        "Time" : "10:30 AM"
+        "Time" : "10:30"
     }
 
 
@@ -56,19 +56,19 @@
         {
             "Date": "27-04-2021",
             "Description": "Quiz syllabus -> until taught in class",
-            "Time": "10:00 AM",
+            "Time": "17:00",
             "Topic": "DBMS quiz"
         },
         {
             "Date": "29-04-2021",
             "Description": "Quiz syllabus -> until taught in class",
-            "Time": "11:00 AM",
+            "Time": "11:00",
             "Topic": "DBMS quiz"
         },
         {
             "Date": "30-04-2021",
             "Description": "Quiz syllabus -> until taught in class",
-            "Time": "10:30 AM",
+            "Time": "10:30",
             "Topic": "EAD quiz"
         }
     ]
