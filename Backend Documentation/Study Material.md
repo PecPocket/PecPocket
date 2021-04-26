@@ -38,7 +38,35 @@
     }
 
 
-## 3. Download image from backend/ Send it to the app
+## 3. GET all uploaded images
+
+    href - ../getuploads/images -- [GET]
+    body - null
+
+    returns - List of uploaded images
+
+    eg
+    http://127.0.0.1:5000/getuploads/images -- [GET]
+
+    returns - 
+    {
+        "Uploads": [
+        "test_image.jpeg",
+        "cse.jpg"
+    ]
+    }
+
+
+## 4. GET all uploaded pdfs
+
+    href - ../getuploads/pdfs -- [GET]
+    body - null
+
+    returns - List of uploaded pdfs
+
+
+
+## 5. Download image from backend/ Send it to the app
 
     href - ../download/image/<image_name>  -- [GET]
     body - null
@@ -55,7 +83,7 @@
     }
 
 
-## 4. Download pdf from backend/ Send it to the app
+## 6. Download pdf from backend/ Send it to the app
 
     href - ../download/pdf/<pdf_name>  -- [GET]
     body - null

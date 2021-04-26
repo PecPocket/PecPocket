@@ -46,6 +46,22 @@ def upload_pdf():
     return jsonify({'code':200})
 
 
+@studyblue.route('/getuploads/images', methods=['GET'])
+def get_image_uploads():
+    #get list from static images
+    dir_list = os.listdir(images_path)
+
+    return jsonify({'Uploads': dir_list})
+
+
+@studyblue.route('/getuploads/pdfs', methods=['GET'])
+def get_pdf_uploads():
+    #get list from static pdfs
+    dir_list = os.listdir(pdfs_path)
+
+    return jsonify({'Uploads': dir_list})
+
+
 @studyblue.route('/download/image/<image_name>',  methods=['GET'])
 def download_image(image_name):
     # check if the file exists
