@@ -78,3 +78,38 @@
     x -> 200 if creation/updating of insta handle is successful
 
 
+## 4. View Profile
+
+    href - ../viewprofile/<SID> -- [GET]
+    body - null
+
+    returns - 
+    i. if not in Personal database i.e. hasn't signed up 
+    {
+      'code':404
+    }
+
+    ii. if the SID is present- successful
+    {
+      "Name": person.Name, (string)
+        "SID": person.SID,   (int)
+        "Branch":person.Branch,     (string)
+        "Year": person.Year,    (int)
+        "Semester": person.Semester,    (int) 
+        "Clubs": club_list  (list of strings of names of clubs)
+        "Insta" : insta_hand (string)
+    }
+
+    eg
+    http://127.0.0.1:5000/viewprofile/19103109 -- [GET]
+
+    returns - 
+    {
+      "Name": "Isha Garg"
+      "SID": 19103109
+      "Branch": "Computer Science Engineering"
+      "Year": 2
+      "Semester": 4
+      "Clubs": ["English Editorial Board", "PDC"],
+      "Insta" : "-"
+    }
