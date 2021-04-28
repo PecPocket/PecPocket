@@ -18,7 +18,6 @@ def config(app):
 
 @studyblue.route('/upload/<subject_code>', methods=['POST'])
 def upload(subject_code):
-    print(request.files)
     # check if file is there
     if not request.files['file']:
         # there is no file, empty upload 
