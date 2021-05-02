@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 import 'classes/CustomReminderDetails.dart';
 
+
+
 class EntryPoint extends StatefulWidget {
   @override
   _EntryPointState createState() => _EntryPointState();
