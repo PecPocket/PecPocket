@@ -184,7 +184,7 @@
 ## 7. Add clubs to the Clubs Table during signup
 
     desc - converts the clubs list to a string to add to the Clubs Table
-    href - ../signupclub -- [POST]
+    href - ../club -- [POST]
     body - 
     {
       "SID" : sid,  (int)
@@ -201,7 +201,7 @@
 
     eg 
 
-    href - ../signupclub
+    href - ../club
     body -
     {
 
