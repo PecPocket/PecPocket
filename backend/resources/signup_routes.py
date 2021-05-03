@@ -52,7 +52,7 @@ def getYear(SID):
 
     # year in degree 
     currentyear = thisyear-admyear if thismonth<7 else thisyear-admyear+1
-    if currentyear > 4 :
+    if currentyear > 4:
         return -1
     return currentyear
 
@@ -61,7 +61,7 @@ def getSemester(currentyear):
     presentTime = datetime.now()
     thismonth = presentTime.month
     sem = currentyear*2 if thismonth<7 else currentyear*2-1
-    if sem >= 9:
+    if sem > 8:
         return -1
     return sem
 
