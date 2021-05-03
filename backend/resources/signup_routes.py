@@ -51,7 +51,9 @@ def getYear(SID):
     admyear = int(str(SID)[0:2])
 
     # year in degree 
-    currentyear = thisyear-admyear if thismonth<5 else thisyear-admyear+1
+    currentyear = thisyear-admyear if thismonth<7 else thisyear-admyear+1
+    if cuurentyear > 4:
+        return -1
 
     return currentyear
 
@@ -59,7 +61,9 @@ def getYear(SID):
 def getSemester(currentyear):
     presentTime = datetime.now()
     thismonth = presentTime.month
-    sem = currentyear*2 if thismonth<5 else currentyear*2-1
+    sem = currentyear*2 if thismonth<7 else currentyear*2-1
+    if sem > 8:
+        return -1
     return sem
 
 # adding signup info to the table
