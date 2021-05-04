@@ -52,7 +52,7 @@ def getYear(SID):
 
     # year in degree 
     currentyear = thisyear-admyear if thismonth<7 else thisyear-admyear+1
-    if cuurentyear > 4:
+    if currentyear > 4:
         return -1
 
     return currentyear
