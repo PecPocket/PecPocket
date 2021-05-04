@@ -113,3 +113,38 @@
       "Clubs": ["English Editorial Board", "PDC"],
       "Insta" : "-"
     }
+
+
+## 5. Add Avatar 
+
+    href - ../avatar -- [POST]
+    body - 
+    {
+      "SID" : sid, (int)
+      "Avatar" : avatar_name (string)
+    }
+
+    returns -
+    {
+      'code' : x
+    }
+    i. not signed up -> 404
+    ii. successful addition -> 200
+
+
+## 6. Edit Avatar
+
+    href - ../avatar -- [PUT]
+    body - 
+    {
+      "SID" : sid, (int)
+      "Avatar" : avatar_name (string)
+    }
+
+    returns - 
+   {
+      'code' : x
+    }
+    i. not signed up -> 404
+    ii. successful addition -> 200
+

@@ -79,8 +79,9 @@ class Personal(db.Model):
     Semester = db.Column(db.Integer, nullable=False)
     Club_codes = db.Column(db.String(50))
     Insta = db.Column(db.String(50))
+    Avatar = db.Column(db.String(100))
 
-    def __init__(self, SID, Name, Branch, Year, Semester, Club_codes, Insta):
+    def __init__(self, SID, Name, Branch, Year, Semester, Club_codes, Insta, Avatar):
         self.SID = SID
         self.Name = Name
         self.Branch = Branch
@@ -88,10 +89,11 @@ class Personal(db.Model):
         self.Semester = Semester
         self.Club_codes = Club_codes
         self.Insta = Insta
+        self.Avatar = Avatar
 
 class PersonalSchema(ma.Schema):
     class Meta:
-        fields = ("SID", "Name", "Branch", "Year", "Semester", "Club_codes", "Insta")
+        fields = ("SID", "Name", "Branch", "Year", "Semester", "Club_codes", "Insta", "Avatar")
 
 
 # Club convertor
@@ -174,8 +176,8 @@ def db_initialiser(app):
     with app.app_context():
         #pass
         # db.drop_all()
-        # db.create_all()
-        pass
+        db.create_all()
+        #pass
 
         
 

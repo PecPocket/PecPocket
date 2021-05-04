@@ -20,7 +20,8 @@
         "Year": person.Year,    (int)
         "Semester": person.Semester,    (int) 
         "Clubs": club_list  (list of strings of names of clubs)
-        "Insta" : insta_hand (string)
+        "Insta" : insta_hand, (string)
+        "Avatar" : avatar_name (string)
     }
     eg 
     http://127.0.0.1:5000/social?query=editorial -- [GET]
@@ -34,7 +35,8 @@
             "Year": 2
             "Semester": 4
             "Clubs": ["English Editorial Board", "Music club"],
-            "Insta" : "kalashjain_"
+            "Insta" : "kalashjain_",
+            "Avatar" : blah
         },
         {
             "Name": "Isha Garg"
@@ -43,7 +45,8 @@
             "Year": 2
             "Semester": 4
             "Clubs": ["English Editorial Board", "PDC"],
-            "Insta" : "-"
+            "Insta" : "-",
+            "Avatar" : bleh
         }
 
         "Insta" : "-" means student does not have any instagram handle attached

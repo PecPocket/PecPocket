@@ -39,6 +39,7 @@ def update_personal(SID):
     Semester = request.json['Semester']
     Club_codes = request.json['Club_codes']
     Insta = request.json["Insta"]
+    Avatar = request.json['Avatar']
 
     personal_info.Name = Name
     personal_info.SID = SID
@@ -47,6 +48,7 @@ def update_personal(SID):
     personal_info.Semester = Semester
     personal_info.Club_codes = Club_codes
     personal_info.Insta = Insta
+    personal_info.Avatar = Avatar
 
     db.session.commit()
 
@@ -111,6 +113,40 @@ def get_profile(SID):
     response = jsonify({"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list, "Insta" : person.Insta})
 
     return response
+
+
+@personalblue.route('/avatar', methods='POST')
+def add_avatar():
+    sid = request.json['SID']
+    avatar = request.json['Avatar']
+
+    personal_info = Personal.query.get(sid)
+
+    if not personal_info :
+        # not signed up
+        return jsonify({'code':404})
+
+    personal_info.Avatar = str(avatar)
+    db.session.commit()
+
+    return jsonify({'code': 200})
+
+
+@personalblue.route('/avatar', methods=['PUT'])
+def update_avatar():
+    sid = request.json['SID']
+    avatar = request.json['Avatar']
+
+    personal_info = Personal.query.get(sid)
+
+    if not personal_info :
+        # not signed up
+        return jsonify({'code':404})
+
+    personal_info.Avatar = avatar
+    db.session.commit()
+
+    return jsonify({'code': 200})
 
 
 @personalblue.route('/personal/delete/<SID>', methods=['DELETE'])

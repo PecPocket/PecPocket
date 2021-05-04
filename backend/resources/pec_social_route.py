@@ -57,7 +57,7 @@ def get_social():
                 # convert codes into names
                 club_name = ClubConvertor.query.get(club_str).Club
                 club_list.append(club_name)
-        response1 = {"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list, "Insta" : person.Insta}
+        response1 = {"Name": person.Name, "SID": person.SID, "Branch":person.Branch, "Year": person.Year, "Semester": person.Semester, "Clubs": club_list, "Insta" : person.Insta, 'Avatar' : person.Avatar}
 
         final_list.append(response1)
 
