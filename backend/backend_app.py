@@ -14,7 +14,6 @@ from resources.club_conv_routes import club_convblue
 from resources.personal_routes import personalblue, update_credentials
 from resources.delete_account import deleteblue
 from resources.fetch_student_list import stulistblue
-# from resources.study_material_routes import studyblue
 from resources.pec_social_route import pecsocialblue
 from resources.search_routes import searchblue
 from resources.study_material_routes import studyblue, config

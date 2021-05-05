@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import SignUp, SignUpSchema,  Personal, PersonalSchema,  Authorization, AuthorizationSchema, signup_schema, personal_schema, authorization_schema, db, ma
+from database.models import Signup, SignUpSchema,  Personal, PersonalSchema,  Authorization, AuthorizationSchema, signup_schema, personal_schema, authorization_schema, db, ma
 
 deleteblue = Blueprint("deleteblue", __name__)
 
@@ -11,7 +11,7 @@ deleteblue = Blueprint("deleteblue", __name__)
 @deleteblue.route("/delete/<SID>", methods=['DELETE'])
 def delete_account(SID):
     
-    signup_delete = SignUp.query.get(SID)
+    signup_delete = Signup.query.get(SID)
 
     # check if the user exists in sign up 
     if not signup_delete:

@@ -21,7 +21,7 @@
         "Semester": person.Semester,    (int) 
         "Clubs": club_list  (list of strings of names of clubs)
         "Insta" : insta_hand, (string)
-        "Avatar" : avatar_name (string)
+        "Avatar" : avatar_name (string)  --> if this value is 'null', that means the user has no avatar set (use default/random)
     }
     eg 
     http://127.0.0.1:5000/social?query=editorial -- [GET]

@@ -115,7 +115,7 @@ def get_profile(SID):
     return response
 
 
-@personalblue.route('/avatar', methods='POST')
+@personalblue.route('/avatar', methods=['POST'])
 def add_avatar():
     sid = request.json['SID']
     avatar = request.json['Avatar']

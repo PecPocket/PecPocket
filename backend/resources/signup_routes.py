@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Super, SignUp, signup_schema, signups_schema, SignUpSchema, SuperSchema, Authorization, Personal, db, ma
+from database.models import Super, Signup, signup_schema, signups_schema, SignUpSchema, SuperSchema, Authorization, Personal, db, ma
 from datetime import datetime
 import bcrypt
 import json
@@ -19,7 +19,7 @@ def check_SID(SID):
         return jsonify({'code':401})
 
     if sid_in_super:
-        sid_in_signup = SignUp.query.get(SID)
+        sid_in_signup = Signup.query.get(SID)
         # print(sid_in_signup)
         if sid_in_signup:
             # already signed up
@@ -73,13 +73,13 @@ def sign_up():
     Password = request.json['Password']
 
     # checking if already in sign up before proceeding
-    sid_in_signup = SignUp.query.get(SID)
+    sid_in_signup = Signup.query.get(SID)
     if sid_in_signup:
         # already signed up 
         return jsonify({'code':402})
 
     hashed_pwd = bcrypt.hashpw(Password.encode('utf-8'), bcrypt.gensalt())
-    new_signup = SignUp(SID, hashed_pwd)
+    new_signup = Signup(SID, hashed_pwd)
 
     # get name from super 
     super_details = Super.query.get(SID)
@@ -99,7 +99,7 @@ def sign_up():
     Semester = getSemester(Year)
 
     # ADD TO PERSONAL TABLE
-    db.session.add(Personal(SID, Name, Branch, Year, Semester, "","-"))
+    db.session.add(Personal(SID, Name, Branch, Year, Semester, "","-", 'null'))
     db.session.commit()
 
     db.session.add(new_signup)
@@ -120,7 +120,7 @@ def sign_up():
 # GET All SignUp
 @signblue.route('/signup', methods=['GET'])
 def get_signups():
-    all_signups = SignUp.query.all()
+    all_signups = Signup.query.all()
     result = signups_schema.dump(all_signups)
     return jsonify(result)
 
@@ -128,7 +128,7 @@ def get_signups():
 # change/update Password
 @signblue.route('/signup/<SID>', methods=['PUT'])
 def update_Password(SID):
-    signup_info = SignUp.query.get(SID)
+    signup_info = Signup.query.get(SID)
 
     SID = request.json['SID']
     Password = request.json['Password'] # new Password
@@ -158,7 +158,7 @@ def login():
     SID = request.json['SID']
     Password = request.json['Password']
 
-    signup_info = SignUp.query.get(SID)
+    signup_info = Signup.query.get(SID)
 
     if not signup_info:
         # not signed up
@@ -183,7 +183,7 @@ def login():
 # # delete from signup 
 @signblue.route('/signup/<SID>', methods=['DELETE'])
 def delete_signup(SID):
-    signup_info = SignUp.query.get(SID)
+    signup_info = Signup.query.get(SID)
 
     # check if the user exists in sign up 
     if not signup_info:

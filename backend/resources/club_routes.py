@@ -1,7 +1,7 @@
 #pylint: disable-all
 
 from flask import Blueprint, Response, request, jsonify
-from database.models import Personal, personal_schema, personals_schema, ClubConvertor, SignUp, db, ma
+from database.models import Personal, personal_schema, personals_schema, ClubConvertor, Signup, db, ma
 
 clubblue = Blueprint("clubblue", __name__)
 
@@ -40,7 +40,7 @@ def add_club():
 @clubblue.route('/club/<SID>', methods=['PUT'])
 def update_club(SID):
 
-    signup_check = SignUp.query.get(SID)
+    signup_check = Signup.query.get(SID)
 
     SID = request.json["SID"]
     Club_list = request.json["Club_codes"] # as a list
@@ -79,7 +79,7 @@ def update_club(SID):
 def get_clubs(SID):
     
 
-    signup_check = SignUp.query.get(SID)
+    signup_check = Signup.query.get(SID)
 
     if not signup_check:
         #student not signed up

@@ -27,9 +27,11 @@ class SuperSchema(ma.Schema):
         fields = ("SID", "Name", "Email")
 
 # Sign Up Table
-class SignUp(db.Model):
+class Signup(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
     Password = db.Column(db.String(50), nullable=False)
+    User = db.relationship("Personal", cascade = "all,delete", backref = "Signedup_students", uselist=False)
+
 
     def __init__(self, SID, Password):
         self.SID = SID
@@ -38,6 +40,32 @@ class SignUp(db.Model):
 class SignUpSchema(ma.Schema):
     class Meta:
         fields = ("SID", "Password")
+
+
+class Personal(db.Model):
+    SID = db.Column(db.Integer, db.ForeignKey('signup.SID'), primary_key=True)
+    Name = db.Column(db.String(100), nullable=False)
+    Branch = db.Column(db.String(25), nullable=False)
+    Year = db.Column(db.Integer, nullable=False)
+    Semester = db.Column(db.Integer, nullable=False)
+    Club_codes = db.Column(db.String(50))
+    Insta = db.Column(db.String(50))
+    Avatar = db.Column(db.String(100))
+
+    def __init__(self, SID, Name, Branch, Year, Semester, Club_codes, Insta, Avatar):
+        self.SID = SID
+        self.Name = Name
+        self.Branch = Branch
+        self.Year = Year
+        self.Semester = Semester
+        self.Club_codes = Club_codes
+        self.Insta = Insta
+        self.Avatar = Avatar
+
+class PersonalSchema(ma.Schema):
+    class Meta:
+        fields = ("SID", "Name", "Branch", "Year", "Semester", "Club_codes", "Insta", "Avatar")
+
 
 
 # Authorization Table
@@ -69,31 +97,6 @@ class SubConvertor(db.Model):
 class SubConvertorSchema(ma.Schema):
     class Meta:
         fields = ("Sub_code", "Subject")
-
-
-class Personal(db.Model):
-    SID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(100), nullable=False)
-    Branch = db.Column(db.String(25), nullable=False)
-    Year = db.Column(db.Integer, nullable=False)
-    Semester = db.Column(db.Integer, nullable=False)
-    Club_codes = db.Column(db.String(50))
-    Insta = db.Column(db.String(50))
-    Avatar = db.Column(db.String(100))
-
-    def __init__(self, SID, Name, Branch, Year, Semester, Club_codes, Insta, Avatar):
-        self.SID = SID
-        self.Name = Name
-        self.Branch = Branch
-        self.Year = Year
-        self.Semester = Semester
-        self.Club_codes = Club_codes
-        self.Insta = Insta
-        self.Avatar = Avatar
-
-class PersonalSchema(ma.Schema):
-    class Meta:
-        fields = ("SID", "Name", "Branch", "Year", "Semester", "Club_codes", "Insta", "Avatar")
 
 
 # Club convertor
@@ -134,7 +137,7 @@ class NotificationsSchema(ma.Schema):
 # Student Notifications
 class StudentNoti(db.Model):
     SID = db.Column(db.Integer, primary_key=True)
-    Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'), primary_key=True, nullable=False)
+    Noti_id = db.Column(db.Integer, db.ForeignKey('notifications.Noti_id'), primary_key=True)
 
     def __init__(self, SID, Noti_id):
         self.SID = SID
@@ -175,9 +178,9 @@ def db_initialiser(app):
     ma.init_app(app)
     with app.app_context():
         #pass
-        # db.drop_all()
-        db.create_all()
-        #pass
+        #db.drop_all()
+        #db.create_all()
+        pass
 
         
 
