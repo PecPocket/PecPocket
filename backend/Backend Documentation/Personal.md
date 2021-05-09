@@ -97,7 +97,8 @@
         "Year": person.Year,    (int)
         "Semester": person.Semester,    (int) 
         "Clubs": club_list  (list of strings of names of clubs)
-        "Insta" : insta_hand (string)
+        "Insta" : insta_handle, (string)
+        "Avatar" : avatar_name (string)
     }
 
     eg
@@ -111,7 +112,8 @@
       "Year": 2
       "Semester": 4
       "Clubs": ["English Editorial Board", "PDC"],
-      "Insta" : "-"
+      "Insta" : "-",
+      "Avatar" : "bleh"
     }
 
 
