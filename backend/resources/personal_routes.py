@@ -115,21 +115,21 @@ def get_profile(SID):
     return response
 
 
-@personalblue.route('/avatar', methods=['POST'])
-def add_avatar():
-    sid = request.json['SID']
-    avatar = request.json['Avatar']
+# @personalblue.route('/avatar', methods=['POST'])
+# def add_avatar():
+#     sid = request.json['SID']
+#     avatar = request.json['Avatar']
 
-    personal_info = Personal.query.get(sid)
+#     personal_info = Personal.query.get(sid)
 
-    if not personal_info :
-        # not signed up
-        return jsonify({'code':404})
+#     if not personal_info :
+#         # not signed up
+#         return jsonify({'code':404})
 
-    personal_info.Avatar = str(avatar)
-    db.session.commit()
+#     personal_info.Avatar = str(avatar)
+#     db.session.commit()
 
-    return jsonify({'code': 200})
+#     return jsonify({'code': 200})
 
 
 @personalblue.route('/avatar', methods=['PUT'])
