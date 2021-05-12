@@ -9,7 +9,7 @@ clubblue = Blueprint("clubblue", __name__)
 @clubblue.route('/club', methods=['POST'])
 def add_club():
     SID = request.json['SID']
-    Club_list = request.json['Club_codes']  # club codes as a list
+    Club_string = request.json['Club_codes']  # club codes as a string "010203.."
 
     personal_info = Personal.query.get(SID)
 
@@ -21,15 +21,12 @@ def add_club():
         #sid already has clubs
         return jsonify({'code':407})
 
-    if Club_list is None :
+    if not Club_string:
         # empty list
         return jsonify({'code':200})
 
-    club_string = ""
-    for club in Club_list:
-        club_string += str(club)
 
-    personal_info.Club_codes = club_string
+    personal_info.Club_codes = Club_string
     db.session.commit()
 
     # returns the created json 
@@ -43,7 +40,7 @@ def update_club(SID):
     signup_check = Signup.query.get(SID)
 
     SID = request.json["SID"]
-    Club_list = request.json["Club_codes"] # as a list
+    Club_string = request.json["Club_codes"] # as a string
 
     if not signup_check:
         #student not signed up
@@ -55,18 +52,14 @@ def update_club(SID):
         # student has no current clubs, make a POST request
         return jsonify({'code':501})
 
-    if Club_list is None :
-        personal_info.Club_codes = None
+    if not Club_string:
+        personal_info.Club_codes = ""
 
         db.session.commit()
         return jsonify({'code':200})
 
-    club_string = ""
-    for club in Club_list:
-        club_string += str(club)
-
     
-    personal_info.Club_codes = club_string
+    personal_info.Club_codes = Club_string
 
     db.session.commit()
 
