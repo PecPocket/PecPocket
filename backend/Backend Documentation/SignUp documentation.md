@@ -188,7 +188,7 @@
     body - 
     {
       "SID" : sid,  (int)
-      "Club_codes" : ["list", "of", "club", "codes"]    (list of strings)
+      "Club_codes" : "010203"   (string of multiple club codes appended)
     }
 
     returns - 
@@ -206,7 +206,7 @@
     {
 
         "SID" : 19103096,
-        "Clubs" :["01", "02", "03"]
+        "Clubs" : "010203"
     }
 
 
