@@ -37,30 +37,27 @@ def add_club():
 @clubblue.route('/club/<SID>', methods=['PUT'])
 def update_club(SID):
 
-    signup_check = Signup.query.get(SID)
-
-    SID = request.json["SID"]
-    Club_string = request.json["Club_codes"] # as a string
-
-    if not signup_check:
-        #student not signed up
-        return jsonify({'code': 403})
+    SID = request.json['SID']
+    Club_string = request.json['Club_codes']  # club codes as a string "010203.."
 
     personal_info = Personal.query.get(SID)
 
-    if not personal_info.Club_codes :
-        # student has no current clubs, make a POST request
-        return jsonify({'code':501})
+    if not personal_info :
+        # sid not in personal --> not signed up
+        return jsonify({'code':403})
+    
+    # if personal_info.Club_codes:
+    #     #sid already has clubs
+    #     return jsonify({'code':407})
 
     if not Club_string:
+        # empty list
         personal_info.Club_codes = ""
-
         db.session.commit()
         return jsonify({'code':200})
 
-    
-    personal_info.Club_codes = Club_string
 
+    personal_info.Club_codes = Club_string
     db.session.commit()
 
     # returns the created json 
