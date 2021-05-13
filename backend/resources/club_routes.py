@@ -5,32 +5,32 @@ from database.models import Personal, personal_schema, personals_schema, ClubCon
 
 clubblue = Blueprint("clubblue", __name__)
 
-#Create a Club Row 
-@clubblue.route('/club', methods=['POST'])
-def add_club():
-    SID = request.json['SID']
-    Club_string = request.json['Club_codes']  # club codes as a string "010203.."
+# #Create a Club Row 
+# @clubblue.route('/club', methods=['POST'])
+# def add_club():
+#     SID = request.json['SID']
+#     Club_string = request.json['Club_codes']  # club codes as a string "010203.."
 
-    personal_info = Personal.query.get(SID)
+#     personal_info = Personal.query.get(SID)
 
-    if not personal_info :
-        # sid not in personal --> not signed up
-        return jsonify({'code':403})
+#     if not personal_info :
+#         # sid not in personal --> not signed up
+#         return jsonify({'code':403})
     
-    if personal_info.Club_codes:
-        #sid already has clubs
-        return jsonify({'code':407})
+#     if personal_info.Club_codes:
+#         #sid already has clubs
+#         return jsonify({'code':407})
 
-    if not Club_string:
-        # empty list
-        return jsonify({'code':200})
+#     if not Club_string:
+#         # empty list
+#         return jsonify({'code':200})
 
 
-    personal_info.Club_codes = Club_string
-    db.session.commit()
+#     personal_info.Club_codes = Club_string
+#     db.session.commit()
 
-    # returns the created json 
-    return jsonify({'code':200})
+#     # returns the created json 
+#     return jsonify({'code':200})
 
 
 # Update a Club Row
