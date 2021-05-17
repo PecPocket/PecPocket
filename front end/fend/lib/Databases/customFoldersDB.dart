@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:fend/classes/CustomFolder.dart';
-import 'package:fend/classes/subjects.dart';
-import 'package:fend/screens/CustomReminders/customReminders.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -16,7 +14,7 @@ class CustomRemindersDatabase {
   Future<Database> get database async {
     if (_database != null) return _database;
 
-    _database = await _initDB('customReminders.db');
+    _database = await _initDB('customReminders3.db');
     return _database;
   }
 

@@ -48,19 +48,22 @@ class _CustomReminderViewState extends State<CustomReminderView> {
     var reminderHelper = ReminderDatabase.instance;
     var databaseReminder = await reminderHelper.getAllReminders();
     print(databaseReminder.length);
-    customReminders.clear();
-    for (int i = 0; i < databaseReminder.length; i++) {
-      DateTime dateTime = new DateTime(
-          databaseReminder[i].year,
-          databaseReminder[i].month,
-          databaseReminder[i].day,
-          databaseReminder[i].hour,
-          databaseReminder[i].minute);
-      customReminders.add(CustomReminderDetails(
-          0,
-          databaseReminder[i].description,
-          dateTime,
-          databaseReminder[i].getNotified));
+    if (databaseReminder.length != 0) {
+      customReminders.clear();
+      for (int i = 0; i < databaseReminder.length; i++) {
+        DateTime dateTime = new DateTime(
+            databaseReminder[i].year,
+            databaseReminder[i].month,
+            databaseReminder[i].day,
+            databaseReminder[i].hour,
+            databaseReminder[i].minute);
+        customReminders.add(CustomReminderDetails(
+            0,
+            'title', //add title here
+            databaseReminder[i].description,
+            dateTime,
+            databaseReminder[i].getNotified));
+      }
     }
   }
 }

@@ -13,7 +13,7 @@ class TimetableDatabase {
   Future<Database> get database async {
     if (_database != null) return _database;
 
-    _database = await _initDB('Timetable9.db');
+    _database = await _initDB('Timetable11.db');
     return _database;
   }
 

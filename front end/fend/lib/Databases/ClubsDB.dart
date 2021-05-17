@@ -14,7 +14,7 @@ class ClubDatabase {
   Future<Database> get database async {
     if (_database != null) return _database;
 
-    _database = await _initDB('Clubs3.db');
+    _database = await _initDB('Clubs6.db');
     return _database;
   }
 
@@ -34,7 +34,8 @@ class ClubDatabase {
       CREATE TABLE $tableClubs
       (
         ${ClubFields.id} INTEGER,
-        ${ClubFields.club} TEXT
+        ${ClubFields.club} TEXT,
+        ${ClubFields.clubCode} TEXT
       )
       ''');
   }

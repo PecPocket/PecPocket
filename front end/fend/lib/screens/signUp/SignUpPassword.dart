@@ -31,7 +31,9 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                     password = value;
                   },
                 ),
-                Container(height: 30,),
+                Container(
+                  height: 30,
+                ),
                 TextFormField(
                   obscureText: true,
                   decoration: InputDecoration(labelText: 'Confirm Password'),
@@ -46,8 +48,9 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                     child: Text('Submit'),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Color(0xffE28F22); // Use the component's default.
+                        (Set<MaterialState> states) {
+                          return Color(
+                              0xffE28F22); // Use the component's default.
                         },
                       ),
                     ),
@@ -87,7 +90,12 @@ class _SignUpPasswordState extends State<SignUpPassword> {
       print(gotUser[0].auth);
       setState(() {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => SignUp2()));
+            context, MaterialPageRoute(builder: (context) => SignUpSubjects()));
+      });
+    } else {
+      setState(() {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Passwords don't match")));
       });
     }
   }

@@ -20,7 +20,7 @@ class Subjects {
 
   Subjects.fromJson(Map<String, dynamic> parsedJson) {
     subject = parsedJson['Subject'];
-    subCode = parsedJson['Sub_code'];
+    subCode = parsedJson['Subject_code'];
   }
 }
 
@@ -42,6 +42,7 @@ class Social {
   int semester;
   String insta;
   List<dynamic> clubs;
+  String avatar;
   Social({
     this.name,
     this.sid,
@@ -50,6 +51,7 @@ class Social {
     this.semester,
     this.insta,
     this.clubs,
+    this.avatar,
   });
 
   factory Social.fromJson(Map<String, dynamic> json) {
@@ -60,8 +62,9 @@ class Social {
       branch: json['Branch'],
       year: json['Year'],
       semester: json['Semester'],
-      insta: json['insta'],
+      insta: json['Insta'],
       clubs: clubsList,
+      avatar: json['Avatar'],
     );
   }
 }

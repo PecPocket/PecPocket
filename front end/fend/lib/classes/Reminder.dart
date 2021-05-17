@@ -3,6 +3,7 @@ final String tableReminders = 'reminders';
 class ReminderFields {
   static final List<String> values = [
     id,
+    title,
     description,
     year,
     month,
@@ -12,6 +13,7 @@ class ReminderFields {
     getNotified
   ];
   static final String id = '_id';
+  static final String title = 'title';
   static final String description = 'description';
   static final String year = 'year';
   static final String month = 'month';
@@ -23,6 +25,7 @@ class ReminderFields {
 
 class Reminder {
   final int id;
+  final title;
   final String description;
   final int year;
   final int month;
@@ -33,6 +36,7 @@ class Reminder {
 
   const Reminder(
       {this.id,
+      this.title,
       this.description,
       this.year,
       this.month,
@@ -43,6 +47,7 @@ class Reminder {
 
   Reminder copy({
     int id,
+    String title,
     String description,
     int year,
     int month,
@@ -53,6 +58,7 @@ class Reminder {
   }) =>
       Reminder(
         id: id ?? this.id,
+        title: title ?? this.title,
         description: description ?? this.description,
         year: year ?? this.year,
         month: month ?? this.month,
@@ -64,6 +70,7 @@ class Reminder {
 
   static Reminder fromJson(Map<String, Object> json) => Reminder(
         id: json[ReminderFields.id] as int,
+        title: json[ReminderFields.title] as String,
         description: json[ReminderFields.description] as String,
         year: json[ReminderFields.year] as int,
         month: json[ReminderFields.month] as int,
@@ -75,6 +82,7 @@ class Reminder {
 
   Map<String, Object> toJson() => {
         ReminderFields.id: id,
+        ReminderFields.title: title,
         ReminderFields.description: description,
         ReminderFields.year: year,
         ReminderFields.month: month,

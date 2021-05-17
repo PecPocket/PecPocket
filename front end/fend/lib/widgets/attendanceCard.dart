@@ -1,225 +1,264 @@
 import 'package:fend/Databases/AttendanceDB.dart';
 import 'package:fend/classes/Attendances.dart';
 import 'package:fend/models/subjectAttendanceDetails.dart';
+import 'package:fend/screens/StudyMaterial/StudyMaterial0.dart';
 import 'package:fend/screens/attendance.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AttendanceCard extends StatefulWidget {
   final SubjectAttendanceDetails subject;
+  int index;
 
-  AttendanceCard({this.subject});
+  AttendanceCard({this.subject, this.index});
 
   @override
   _AttendanceCardState createState() => _AttendanceCardState();
 }
 
+//List<int> colorChoices = [0xff7BA399, 0xffF07F83, 0XffFECE48, 0xffDE6A66, 0xff813CA3, 0xff9A275A, 0xffD97F30, 0xff484F70, 0xff2F3737, 0xff23356C];
+
 class _AttendanceCardState extends State<AttendanceCard> {
   @override
+  void initState() {
+    setAttendanceStatus();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List<ChartData> chartData = [
+      ChartData('Attended', widget.subject.percentage, Color(0xffffffff)),
+      ChartData('Not attended', (100 - widget.subject.percentage),
+          Color(widget.subject.selectedColor))
+    ];
     return Card(
-      margin: EdgeInsets.fromLTRB(25, 16, 25, 0),
-      color: Color(0xffCADBE4),
+      margin: EdgeInsets.fromLTRB(15, 0, 15, 25),
+      color: Color(widget.subject.selectedColor),
+      elevation: 15,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              flex: 6,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    widget.subject.subjectName +
-                        '\n' +
-                        widget.subject.subtitle +
-                        '\n',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color(0xff235790),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    widget.subject.attended.toString() +
-                        ' / ' +
-                        widget.subject.total.toString(),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff235790),
-                    ),
-                  ),
-                  Text(
-                    widget.subject.status,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xff235790),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 15, 10),
-                  child: Container(
-                    height: 70,
-                    width: 70,
-                    //padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                    child: PieChart(
-                      PieChartData(
-                        sections: [
-                          PieChartSectionData(
-                              value: widget.subject.percentage,
-                              color: Color(0xff235790),
-                              showTitle: false),
-                          PieChartSectionData(
-                              value: (100 - widget.subject.percentage),
-                              color: Color(0xffE28F22),
-                              showTitle: false)
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                    height: 85,
+                    width: 85,
+                    child: Center(
+                      child: SfCircularChart(
+                        annotations: <CircularChartAnnotation>[
+                          CircularChartAnnotation(
+                            widget: Container(
+                              child: Text(
+                                (widget.subject.percentage.round()).toString() +
+                                    "%",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        series: <CircularSeries>[
+                          DoughnutSeries<ChartData, String>(
+                            dataSource: chartData,
+                            pointColorMapper: (ChartData data, _) =>
+                                data.chartColor,
+                            xValueMapper: (ChartData data, _) => data.title,
+                            yValueMapper: (ChartData data, _) => data.perc,
+                            radius: '100%',
+                            innerRadius: '85%',
+                            opacity: 0.8,
+                          ),
                         ],
                       ),
+                    )),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 30,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.check_circle,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                        onPressed: () {
+                          var dbHelper = AttendanceDatabase.instance;
+
+                          setState(() {
+                            widget.subject.attended += 1;
+                            widget.subject.total += 1;
+                            widget.subject.percentage =
+                                (widget.subject.attended /
+                                        widget.subject.total) *
+                                    100;
+                            if (widget.subject.percentage == 100) {
+                              widget.subject.percentage = 99.99;
+                            }
+
+                            var map = {
+                              "id": 1,
+                              "subject": widget.subject.subjectName,
+                              "subtitle": widget.subject.subtitle,
+                              "classesAttended": widget.subject.attended,
+                              "totalClasses": widget.subject.total,
+                            };
+
+                            Attendances attendance = Attendances.fromJson(map);
+
+                            dbHelper.deleteAttendance(
+                                attendance.subject, attendance.subtitle);
+                            dbHelper.addAttendance(attendance);
+                            setAttendanceStatus();
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 5, 15, 0),
-                  child: Text(
-                    (widget.subject.percentage.round()).toString() + "%",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff235790),
+                    SizedBox(
+                      height: 30,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.cancel,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                        onPressed: () {
+                          var dbHelper = AttendanceDatabase.instance;
+                          setState(() {
+                            widget.subject.total += 1;
+                            widget.subject.percentage =
+                                (widget.subject.attended /
+                                        widget.subject.total) *
+                                    100;
+                            if (widget.subject.percentage == 100) {
+                              widget.subject.percentage = 99.99;
+                            } else if (widget.subject.attended == 0) {
+                              widget.subject.percentage = 00.01;
+                            }
+                            var map = {
+                              "id": 0,
+                              "subject": widget.subject.subjectName,
+                              "subtitle": widget.subject.subtitle,
+                              "classesAttended": widget.subject.attended,
+                              "totalClasses": widget.subject.total,
+                            };
+
+                            Attendances attendance = Attendances.fromJson(map);
+
+                            dbHelper.deleteAttendance(
+                                attendance.subject, attendance.subtitle);
+                            dbHelper.addAttendance(attendance);
+                            setAttendanceStatus();
+                          });
+                        },
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 30,
+                      child: IconButton(
+                        onPressed: () {
+                          return showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    widget.subject.subjectName +
+                                        " " +
+                                        widget.subject.subtitle,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          editSelectedAttendanceCard();
+                                        },
+                                        child: Text(
+                                          "Edit",
+                                          style: TextStyle(
+                                              color: Color(0xff235790),
+                                              fontSize: 16),
+                                        )),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          deleteSelectedAttendanceCard();
+                                        },
+                                        child: Text(
+                                          "Delete",
+                                          style: TextStyle(
+                                              color: Color(0xff235790),
+                                              fontSize: 16),
+                                        )),
+                                  ],
+                                );
+                              });
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            Column(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.check_circle,
-                    color: Color(0xff235790),
-                    size: 27,
-                  ),
-                  onPressed: () {
-                    var dbHelper = AttendanceDatabase.instance;
-
-                    setState(() {
-                      widget.subject.attended += 1;
-                      widget.subject.total += 1;
-                      widget.subject.percentage =
-                          (widget.subject.attended / widget.subject.total) *
-                              100;
-                      if (widget.subject.percentage == 100) {
-                        widget.subject.percentage = 99.99;
-                      }
-
-                      var map = {
-                        "id": 1,
-                        "subject": widget.subject.subjectName,
-                        "subtitle": widget.subject.subtitle,
-                        "classesAttended": widget.subject.attended,
-                        "totalClasses": widget.subject.total,
-                      };
-
-                      Attendances attendance = Attendances.fromJson(map);
-
-                      dbHelper.deleteAttendance(
-                          attendance.subject, attendance.subtitle);
-                      dbHelper.addAttendance(attendance);
-                      setAttendanceStatus();
-                    });
-                  },
+            Text(
+              widget.subject.attended.toString() +
+                  ' / ' +
+                  widget.subject.total.toString(),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              widget.subject.subjectName,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              widget.subject.subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 7,),
+              child: Text(
+                widget.subject.status,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.white,
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.cancel,
-                    color: Color(0xffE28F22),
-                    size: 27,
-                  ),
-                  onPressed: () {
-                    var dbHelper = AttendanceDatabase.instance;
-                    setState(() {
-                      widget.subject.total += 1;
-                      widget.subject.percentage =
-                          (widget.subject.attended / widget.subject.total) *
-                              100;
-                      if (widget.subject.percentage == 100) {
-                        widget.subject.percentage = 99.99;
-                      } else if (widget.subject.attended == 0) {
-                        widget.subject.percentage = 00.01;
-                      }
-                      var map = {
-                        "id": 0,
-                        "subject": widget.subject.subjectName,
-                        "subtitle": widget.subject.subtitle,
-                        "classesAttended": widget.subject.attended,
-                        "totalClasses": widget.subject.total,
-                      };
-
-                      Attendances attendance = Attendances.fromJson(map);
-
-                      dbHelper.deleteAttendance(
-                          attendance.subject, attendance.subtitle);
-                      dbHelper.addAttendance(attendance);
-                      setAttendanceStatus();
-                    });
-                  },
-                ),
-                IconButton(
-                  onPressed: () {
-                    return showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                              widget.subject.subjectName +
-                                  " " +
-                                  widget.subject.subtitle,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    editSelectedAttendanceCard();
-                                  },
-                                  child: Text(
-                                    "Edit",
-                                    style: TextStyle(
-                                        color: Color(0xff235790), fontSize: 16),
-                                  )),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    deleteSelectedAttendanceCard();
-                                  },
-                                  child: Text(
-                                    "Delete",
-                                    style: TextStyle(
-                                        color: Color(0xff235790), fontSize: 16),
-                                  )),
-                            ],
-                          );
-                        });
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: Color(0xff588297),
-                    size: 25,
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
@@ -358,4 +397,11 @@ class _AttendanceCardState extends State<AttendanceCard> {
       widget.subject.status = "Don't miss the next $shouldAttend classes";
     }
   }
+}
+
+class ChartData {
+  ChartData(this.title, this.perc, [this.chartColor]);
+  final String title;
+  final double perc;
+  final Color chartColor;
 }

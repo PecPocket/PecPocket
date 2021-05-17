@@ -1,42 +1,61 @@
+import 'package:fend/screens/mainPage.dart';
 import 'package:fend/screens/signUp/signUpSID.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:fend/globals.dart' as global;
-import 'mainPage.dart';
 
 class Login extends StatefulWidget {
-  createState() {
-    return LoginState();
-  }
+  @override
+  _LoginState createState() => _LoginState();
 }
 
-class LoginState extends State<Login> {
+class _LoginState extends State<Login> {
   int sidFlag = 0;
   String sid;
   String password;
+  String sidError;
+  String passwordError;
   final formKey = GlobalKey<FormState>();
-  Widget build(context) {
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlueAccent,
       body: ListView(
         children: [
-          Image.asset('assets/bg2.png'),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(40, 5, 40, 0),
+          Image.asset(
+            'assets/signup.png',
+            height: 220,
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - 245,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(55), topRight: Radius.circular(55)),
+              color: Colors.white,
+            ),
             child: Form(
               key: formKey,
-              child: Column(
-                children: [
-                  sidField(),
-                  passwordField(),
-                  submitButton(),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    sidField(),
+                    Container(
+                      height: 20,
+                    ),
+                    passwordField(),
+                    forgotPassword(),
+                    toRegister(),
+                    submitButton(),
+                  ],
+                ),
               ),
             ),
           ),
-          toRegister(),
-          Image.asset('assets/bg1.png'),
         ],
       ),
     );
@@ -46,9 +65,14 @@ class LoginState extends State<Login> {
     return TextFormField(
       decoration: InputDecoration(
         labelText: 'SID',
+        labelStyle: TextStyle(
+          color: Colors.black,
+        ),
+        errorText: sidError,
       ),
       onChanged: (String value) {
         setState(() {
+          sidError = null;
           sid = value;
         });
       },
@@ -57,11 +81,17 @@ class LoginState extends State<Login> {
 
   passwordField() {
     return TextFormField(
+      obscureText: true,
       decoration: InputDecoration(
         labelText: 'Password',
+        labelStyle: TextStyle(
+          color: Colors.black,
+        ),
+        errorText: passwordError,
       ),
       onChanged: (String value) {
         setState(() {
+          passwordError = null;
           password = value;
         });
       },
@@ -69,39 +99,71 @@ class LoginState extends State<Login> {
   }
 
   submitButton() {
+    return ElevatedButton(
+      onPressed: validateCredentials,
+      child: Text('Log In'),
+      style: ElevatedButton.styleFrom(
+        primary: Color(0xff272727),
+        minimumSize: Size(MediaQuery.of(context).size.width, 45),
+        shape:
+        RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20)),
+      ),
+    );
+  }
+
+  forgotPassword() {
     return Padding(
-      padding: const EdgeInsets.only(top: 60, bottom: 20),
-      child: ElevatedButton(
-        onPressed: validateCredentials,
-        child: Text('Log In'),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                return Color(0xffE28F22); // Use the component's default.
-              },
-            ),
-          ),
+      padding: const EdgeInsets.only(top: 15),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: RichText(
+          text: new TextSpan(
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+                decoration: TextDecoration.underline,
+              ),
+              children: [
+                new TextSpan(
+                  text: 'Forgot Password?',
+                  style: TextStyle(color: Color(0xff272727)),
+                  recognizer: new TapGestureRecognizer()
+                    ..onTap = () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SignUp())), // add forgot password page instead of signup
+                )
+              ]),
+        ),
       ),
     );
   }
 
   toRegister() {
-    return Center(
-      child: RichText(
-        text: new TextSpan(
-            text: 'Do not have an account? ',
-            style: TextStyle(
-              color: Colors.grey,
-            ),
-            children: [
-          new TextSpan(
-            text: 'Register Now',
-            style: TextStyle(
-              color: Color(0xffE28F22)
-            ),
-            recognizer: new TapGestureRecognizer()..onTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp1())),
-          )
-        ]),
+    return Padding(
+      padding: const EdgeInsets.only(top: 90, bottom: 20),
+      child: Center(
+        child: RichText(
+          text: new TextSpan(
+              text: 'Do not have an account? ',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+              ),
+              children: [
+                new TextSpan(
+                  text: 'Sign Up',
+                  style: TextStyle(
+                    color: Color(0xff272727),
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: new TapGestureRecognizer()
+                    ..onTap = () => Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => SignUp())),
+                )
+              ]),
+        ),
       ),
     );
   }
@@ -117,7 +179,7 @@ class LoginState extends State<Login> {
 
     if (body.length == 32) {
       setState(() {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MainPage(),
@@ -125,20 +187,10 @@ class LoginState extends State<Login> {
         );
       });
     } else if (body[14] == '4') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Incorrect Password'),
-        ),
-      );
+      passwordError = 'Incorrect Password';
     }
-    //snackbar for incorrect password
     else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('No such user'),
-        ),
-      );
-      //snackBar for user not found
+      sidError = 'No such user';
     }
   }
 }

@@ -23,7 +23,9 @@ class _SignUpEmailState extends State<SignUpEmail> {
             child: Column(
               children: [
                 TextField(
-                  decoration: InputDecoration(labelText: 'Enter the OTP sent to your PEC email account'),
+                  decoration: InputDecoration(
+                      labelText:
+                          'Enter the OTP sent to your PEC email account'),
                   onChanged: (String value) {
                     response = value;
                   },
@@ -31,12 +33,13 @@ class _SignUpEmailState extends State<SignUpEmail> {
                 Padding(
                   padding: const EdgeInsets.only(top: 100, bottom: 30),
                   child: ElevatedButton(
-                      onPressed: validateUser,
-                      child: Text('Submit'),
+                    onPressed: validateUser,
+                    child: Text('Submit'),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          return Color(0xffE28F22); // Use the component's default.
+                        (Set<MaterialState> states) {
+                          return Color(
+                              0xffE28F22); // Use the component's default.
                         },
                       ),
                     ),
@@ -57,6 +60,9 @@ class _SignUpEmailState extends State<SignUpEmail> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignUpPassword()));
       });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('OTP does not match the one sent on your PEC Email')));
     }
   }
 }
